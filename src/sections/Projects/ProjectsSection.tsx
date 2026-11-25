@@ -23,6 +23,9 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
   const [selectedCategory, setSelectedCategory] = useState<'ALL' | ProjectCategory>('ALL');
 
   const publishedItems = items.filter((item) => item.published);
+  const availableCategories = CATEGORIES.filter((cat) =>
+    publishedItems.some((item) => item.categories.includes(cat))
+  );
   const filteredItems =
     selectedCategory === 'ALL'
       ? publishedItems
@@ -60,7 +63,7 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
             >
               {t.allCategory}
             </button>
-            {CATEGORIES.map((category) => (
+            {availableCategories.map((category) => (
               <button
                 key={category}
                 type="button"

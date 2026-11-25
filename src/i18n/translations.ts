@@ -167,8 +167,7 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Historial laboral verificable orientado a resultados técnicos y estabilidad operativa.',
       responsibilities: 'Responsabilidades',
       achievements: 'Logros verificables',
-      emptyNotice:
-        'Los registros detallados de experiencia laboral se encuentran en proceso de validación y se mostrarán aquí una vez confirmados.',
+      emptyNotice: 'Próximamente más detalles de trayectoria.',
     },
     tech: {
       eyebrow: '03 · Capacidades técnicas',
@@ -198,7 +197,7 @@ export const translations: Record<Language, Translations> = {
       codeButton: 'Repositorio',
       demoButton: 'Demo',
       emptyNotice:
-        'Los proyectos públicos verificables se están preparando para publicación (sin exponer código institucional confidencial). Puedes consultar repositorios públicos en GitHub.',
+        'No hay proyectos en esta categoría por el momento. Puedes explorar más en mi GitHub.',
     },
     education: {
       eyebrow: '05 · Preparación',
@@ -206,8 +205,7 @@ export const translations: Record<Language, Translations> = {
       certificationsTitle: 'Certificaciones y cursos',
       languagesTitle: 'Idiomas',
       verifyLink: 'Verificar credencial',
-      pendingNotice:
-        'Datos académicos y certificaciones adicionales pendientes de confirmación oficial para su publicación.',
+      pendingNotice: 'Sin registros adicionales por el momento.',
     },
     beyond: {
       eyebrow: '06 · 20% Identidad personal',
@@ -322,8 +320,7 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Verifiable work history focused on technical outcomes and operational stability.',
       responsibilities: 'Responsibilities',
       achievements: 'Verifiable achievements',
-      emptyNotice:
-        'Detailed work experience records are currently being validated and will appear here once confirmed.',
+      emptyNotice: 'More career details coming soon.',
     },
     tech: {
       eyebrow: '03 · Technical Capabilities',
@@ -353,7 +350,7 @@ export const translations: Record<Language, Translations> = {
       codeButton: 'Repository',
       demoButton: 'Demo',
       emptyNotice:
-        'Verifiable public projects are being prepared for publication (without exposing confidential institutional code). Public repositories are available on GitHub.',
+        'No projects in this category at the moment. You can explore more on my GitHub.',
     },
     education: {
       eyebrow: '05 · Background',
@@ -361,8 +358,7 @@ export const translations: Record<Language, Translations> = {
       certificationsTitle: 'Certifications & Courses',
       languagesTitle: 'Languages',
       verifyLink: 'Verify credential',
-      pendingNotice:
-        'Academic details and additional certifications are pending official confirmation before publication.',
+      pendingNotice: 'No additional records at the moment.',
     },
     beyond: {
       eyebrow: '06 · 20% Personal Identity',
