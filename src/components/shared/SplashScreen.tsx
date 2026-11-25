@@ -8,7 +8,7 @@ const BOOT_STEPS = [
 ];
 
 /**
- * Pantalla de carga tecnológica + lucha libre (~2s, respeta prefers-reduced-motion).
+ * Pantalla de carga tecnológica + ring de lucha libre (~3s, respeta prefers-reduced-motion).
  */
 export function SplashScreen() {
   const [visible, setVisible] = useState(() => {
@@ -39,25 +39,82 @@ export function SplashScreen() {
   return (
     <div
       aria-hidden="true"
-      className={`no-print bg-grid-pattern fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080F1E] transition-opacity duration-350 ${
+      className={`no-print bg-grid-pattern fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080F1E] px-4 transition-opacity duration-350 ${
         fading ? 'pointer-events-none opacity-0' : 'opacity-100'
       }`}
     >
-      <div className="relative flex w-full max-w-sm flex-col items-center gap-5 rounded-2xl border border-[#2563EB]/30 bg-[#080F1E]/95 px-7 py-8 text-center shadow-2xl shadow-[#2563EB]/10">
-        {/* Minimalist 3-rope Lucha Ring Corner Lines */}
-        <div className="flex w-full items-center gap-3">
-          <div className="flex flex-1 flex-col gap-1.5">
-            <span className="h-[1.5px] w-full bg-[#2563EB]/60" />
-            <span className="h-[1.5px] w-full bg-[#F1F5F9]/40" />
-            <span className="h-[1.5px] w-full bg-[#A50044]/70" />
-          </div>
-          <div className="scale-125 px-2">
+      <div className="relative flex w-full max-w-md flex-col items-center gap-4 rounded-2xl border border-[#2563EB]/30 bg-[#080F1E]/95 px-6 py-7 text-center shadow-2xl shadow-[#2563EB]/15">
+        {/* Perspective Lucha Libre Ring with CI. Logo in the Center */}
+        <div className="relative flex h-44 w-full items-center justify-center">
+          <svg
+            viewBox="0 0 320 170"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-full w-full"
+          >
+            {/* Ring Mat (Perspective Trapezoid) */}
+            <polygon
+              points="55,68 265,68 302,142 18,142"
+              fill="#14243D"
+              stroke="#2563EB"
+              strokeOpacity="0.6"
+              strokeWidth="1.8"
+            />
+            {/* Ring Apron */}
+            <polygon
+              points="18,142 302,142 296,158 24,158"
+              fill="#0D1933"
+              stroke="#2563EB"
+              strokeOpacity="0.35"
+              strokeWidth="1.2"
+            />
+            {/* Center Ring Circle */}
+            <ellipse
+              cx="160"
+              cy="104"
+              rx="42"
+              ry="16"
+              fill="#080F1E"
+              fillOpacity="0.65"
+              stroke="#63B3FA"
+              strokeOpacity="0.45"
+              strokeWidth="1.4"
+            />
+
+            {/* Back Ropes (Top, Middle, Bottom) */}
+            <line x1="55" y1="26" x2="265" y2="26" stroke="#2563EB" strokeWidth="2" />
+            <line x1="55" y1="40" x2="265" y2="40" stroke="#F1F5F9" strokeOpacity="0.7" strokeWidth="1.8" />
+            <line x1="55" y1="54" x2="265" y2="54" stroke="#A50044" strokeWidth="2" />
+
+            {/* Left Side Ropes */}
+            <line x1="55" y1="26" x2="18" y2="86" stroke="#2563EB" strokeWidth="2" />
+            <line x1="55" y1="40" x2="18" y2="104" stroke="#F1F5F9" strokeOpacity="0.7" strokeWidth="1.8" />
+            <line x1="55" y1="54" x2="18" y2="122" stroke="#A50044" strokeWidth="2" />
+
+            {/* Right Side Ropes */}
+            <line x1="265" y1="26" x2="302" y2="86" stroke="#2563EB" strokeWidth="2" />
+            <line x1="265" y1="40" x2="302" y2="104" stroke="#F1F5F9" strokeOpacity="0.7" strokeWidth="1.8" />
+            <line x1="265" y1="54" x2="302" y2="122" stroke="#C8102E" strokeWidth="2" />
+
+            {/* 4 Corner Posts & Turnbuckles */}
+            {/* Back Left (Blue) */}
+            <line x1="55" y1="20" x2="55" y2="68" stroke="#63B3FA" strokeWidth="4" strokeLinecap="round" />
+            {/* Back Right (Garnet) */}
+            <line x1="265" y1="20" x2="265" y2="68" stroke="#A50044" strokeWidth="4" strokeLinecap="round" />
+            {/* Front Left (Blue) */}
+            <line x1="18" y1="78" x2="18" y2="142" stroke="#2563EB" strokeWidth="5" strokeLinecap="round" />
+            {/* Front Right (Crimson) */}
+            <line x1="302" y1="78" x2="302" y2="142" stroke="#C8102E" strokeWidth="5" strokeLinecap="round" />
+
+            {/* Front Ropes (crossing in front with subtle transparency) */}
+            <line x1="18" y1="86" x2="302" y2="86" stroke="#2563EB" strokeOpacity="0.75" strokeWidth="2.2" />
+            <line x1="18" y1="104" x2="302" y2="104" stroke="#F1F5F9" strokeOpacity="0.55" strokeWidth="2" />
+            <line x1="18" y1="122" x2="302" y2="122" stroke="#A50044" strokeOpacity="0.8" strokeWidth="2.2" />
+          </svg>
+
+          {/* CI. Logo centered inside the Ring */}
+          <div className="absolute top-1/2 -translate-y-1/2 scale-125 rounded-xl bg-[#080F1E]/75 p-1.5 backdrop-blur-xs">
             <BrandLogo showWordmark={false} />
-          </div>
-          <div className="flex flex-1 flex-col gap-1.5">
-            <span className="h-[1.5px] w-full bg-[#2563EB]/60" />
-            <span className="h-[1.5px] w-full bg-[#F1F5F9]/40" />
-            <span className="h-[1.5px] w-full bg-[#C8102E]/70" />
           </div>
         </div>
 
