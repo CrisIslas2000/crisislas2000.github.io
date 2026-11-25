@@ -21,10 +21,10 @@ export function SplashScreen() {
   useEffect(() => {
     if (!visible) return;
 
-    const step1 = window.setTimeout(() => setStepIndex(1), 550);
-    const step2 = window.setTimeout(() => setStepIndex(2), 1150);
-    const fadeTimer = window.setTimeout(() => setFading(true), 1750);
-    const hideTimer = window.setTimeout(() => setVisible(false), 2100);
+    const step1 = window.setTimeout(() => setStepIndex(1), 850);
+    const step2 = window.setTimeout(() => setStepIndex(2), 1750);
+    const fadeTimer = window.setTimeout(() => setFading(true), 2650);
+    const hideTimer = window.setTimeout(() => setVisible(false), 3000);
 
     return () => {
       window.clearTimeout(step1);
