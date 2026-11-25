@@ -106,7 +106,7 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
             {filteredItems.map((project, index) => (
               <article
                 key={project.id}
-                className="relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/80 dark:hover:border-[#63B3FA]"
+                className="card-interactive group relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white p-5 hover:border-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/80 dark:hover:border-[#63B3FA]"
               >
                 {/* Thin Editorial Sports Top Bar (#2563EB -> #A50044 -> #C8102E) */}
                 <div

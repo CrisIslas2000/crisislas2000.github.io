@@ -22,7 +22,7 @@ export function ContactSection({ profile, language, t, onDownloadCv }: ContactSe
             href={profile.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]"
+            className="card-interactive flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 hover:border-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]"
           >
             <Github className="mt-0.5 h-5 w-5 shrink-0 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
             <div>
@@ -39,7 +39,7 @@ export function ContactSection({ profile, language, t, onDownloadCv }: ContactSe
               href={profile.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]"
+              className="card-interactive flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 hover:border-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]"
             >
               <Linkedin className="mt-0.5 h-5 w-5 shrink-0 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
               <div>
@@ -67,7 +67,7 @@ export function ContactSection({ profile, language, t, onDownloadCv }: ContactSe
           {profile.email ? (
             <a
               href={`mailto:${profile.email}`}
-              className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]"
+              className="card-interactive flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 hover:border-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]"
             >
               <Mail className="mt-0.5 h-5 w-5 shrink-0 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
               <div className="min-w-0">

@@ -41,7 +41,7 @@ export function TechStackSection({
         type="button"
         onClick={() => setSelectedName(player.name)}
         aria-pressed={isSelected}
-        className={`group relative flex flex-col items-center gap-1 rounded-xl border px-2.5 py-2 text-center transition-all ${
+        className={`group relative flex flex-col items-center gap-1 rounded-xl border px-2.5 py-2 text-center transition-all duration-200 hover:-translate-y-0.5 ${
           isSelected
             ? 'border-[#63B3FA] bg-[#2563EB]/25 ring-2 ring-[#63B3FA]/50'
             : 'border-[#2563EB]/40 bg-[#080F1E]/85 hover:border-[#63B3FA]/80 hover:bg-[#14243D]'
@@ -402,7 +402,7 @@ export function TechStackSection({
                       <li
                         key={item.name}
                         title={item.note?.[language]}
-                        className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-xs ${
+                        className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-xs transition-transform duration-200 hover:-translate-y-0.5 ${
                           item.usage === 'professional'
                             ? 'border border-[#2563EB]/30 bg-[#2563EB]/10 text-[#1D4ED8] dark:text-[#F1F5F9]'
                             : 'border border-dashed border-[#63B3FA]/50 bg-[#63B3FA]/10 text-slate-700 dark:text-[#63B3FA]'

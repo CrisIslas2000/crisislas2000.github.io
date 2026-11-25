@@ -23,9 +23,9 @@ export function AboutSection({ t }: AboutSectionProps) {
             return (
               <article
                 key={pillar.title}
-                className="rounded-2xl border border-slate-200 bg-white p-6 transition-colors hover:border-[#2563EB]/50 dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]/40"
+                className="card-interactive group rounded-2xl border border-slate-200 bg-white p-6 hover:border-[#2563EB]/50 dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]/50"
               >
-                <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#2563EB]/10 text-[#2563EB] dark:text-[#63B3FA]">
+                <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#2563EB]/10 text-[#2563EB] transition-transform duration-300 group-hover:scale-110 dark:text-[#63B3FA]">
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <h3 className="mt-4 font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">

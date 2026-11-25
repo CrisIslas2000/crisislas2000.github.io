@@ -1,6 +1,7 @@
 import { Footer } from '@/components/layout/Footer';
 import { Navbar } from '@/components/layout/Navbar';
 import { AtsCvPrintView } from '@/components/shared/AtsCvPrintView';
+import { SplashScreen } from '@/components/shared/SplashScreen';
 import { certificationItems, educationItems, languageSkills } from '@/data/education';
 import { experienceItems } from '@/data/experience';
 import { profileData } from '@/data/profile';
@@ -29,6 +30,8 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] transition-colors dark:bg-[#080F1E] dark:text-[#F1F5F9]">
+      <SplashScreen />
+
       {/* Skip to content for keyboard accessibility */}
       <a
         href="#contenido-principal"

@@ -48,7 +48,7 @@ export function ExperienceSection({ items, language, t }: ExperienceSectionProps
                     aria-hidden="true"
                     className="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-[#2563EB] ring-4 ring-[#2563EB]/20"
                   />
-                  <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-[#14243D]/60">
+                  <div className="card-interactive rounded-xl border border-slate-200 bg-white p-5 hover:border-[#2563EB]/50 dark:border-slate-800 dark:bg-[#14243D]/60 dark:hover:border-[#63B3FA]/40">
                     <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
                       {item.role[language]} —{' '}
                       <span className="text-[#2563EB] dark:text-[#63B3FA]">

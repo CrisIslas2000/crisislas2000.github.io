@@ -84,9 +84,9 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
             return (
               <article
                 key={card.id}
-                className={`rounded-xl border border-slate-200 ${leftBorder} bg-white p-6 dark:border-slate-800 dark:bg-[#14243D]/75`}
+                className={`card-interactive group rounded-xl border border-slate-200 ${leftBorder} bg-white p-6 hover:border-[#2563EB]/50 dark:border-slate-800 dark:bg-[#14243D]/75 dark:hover:border-[#63B3FA]/40`}
               >
-                <div className="mb-5 flex justify-center">
+                <div className="mb-5 flex justify-center transition-transform duration-300 group-hover:scale-105">
                   <CardIcon id={card.id} />
                 </div>
                 <h3 className="font-display text-lg font-bold text-slate-900 dark:text-[#F1F5F9]">
