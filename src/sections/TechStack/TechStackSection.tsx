@@ -144,12 +144,12 @@ export function TechStackSection({
 
             <div
               onMouseLeave={() => setIsInspecting(false)}
-              className="grid items-stretch gap-6 lg:grid-cols-12"
+              className="flex flex-col items-stretch gap-6 lg:flex-row"
             >
-              {/* Left: Pitch shrinks smoothly on hover/inspect to give more space to Inspector */}
+              {/* Left: Pitch shrinks smoothly via animatable percentage width */}
               <div
-                className={`transition-all duration-300 ${
-                  isInspecting ? 'lg:col-span-7' : 'lg:col-span-8'
+                className={`w-full transition-[width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  isInspecting ? 'lg:w-[57%]' : 'lg:w-[66%]'
                 }`}
               >
                 <div className="relative overflow-hidden rounded-2xl border border-[#2563EB]/50 bg-[#080F1E] p-4 sm:p-6">
@@ -316,12 +316,12 @@ export function TechStackSection({
                 </div>
               </div>
 
-              {/* Right: Inspector expands smoothly when hovering/selecting */}
+              {/* Right: Inspector expands smoothly via animatable percentage width */}
               <aside
-                className={`flex flex-col justify-between rounded-2xl border bg-white p-6 transition-all duration-300 dark:bg-[#14243D]/85 ${
+                className={`flex w-full flex-col justify-between rounded-2xl border bg-white p-6 transition-[width,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-[#14243D]/85 ${
                   isInspecting
-                    ? 'border-[#2563EB] shadow-xl shadow-[#2563EB]/15 lg:col-span-5 dark:border-[#63B3FA]'
-                    : 'border-slate-200 lg:col-span-4 dark:border-slate-800'
+                    ? 'border-[#2563EB] shadow-xl shadow-[#2563EB]/15 lg:w-[43%] dark:border-[#63B3FA]'
+                    : 'border-slate-200 lg:w-[34%] dark:border-slate-800'
                 }`}
               >
                 <div>
