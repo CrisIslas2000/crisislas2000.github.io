@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink, FolderGit2, Github, LayoutGrid, Orbit } from 'lucide-react';
 import type { Translations } from '@/i18n/translations';
 import type { Language, ProjectCategory, ProjectItem } from '@/types/portfolio';
@@ -23,6 +23,7 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
   const [selectedCategory, setSelectedCategory] = useState<'ALL' | ProjectCategory>('ALL');
   const [layoutMode, setLayoutMode] = useState<'roulette' | 'grid'>('roulette');
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const publishedItems = items.filter((item) => item.published);
   const availableCategories = CATEGORIES.filter((cat) =>
@@ -35,6 +36,20 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
 
   const safeIndex =
     filteredItems.length > 0 ? Math.min(activeIndex, filteredItems.length - 1) : 0;
+
+  useEffect(() => {
+    if (layoutMode !== 'roulette' || filteredItems.length <= 1 || isPaused) return;
+    const reduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % filteredItems.length);
+    }, 8000);
+
+    return () => window.clearInterval(timer);
+  }, [layoutMode, filteredItems.length, isPaused]);
 
   const handleCategoryChange = (category: 'ALL' | ProjectCategory) => {
     setSelectedCategory(category);
@@ -269,8 +284,11 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
             </a>
           </div>
         ) : layoutMode === 'roulette' ? (
-          <div>
-            {/* Roulette Carousel Stage */}
+          <div
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            {/* Roulette Carousel Stage (auto-rotates every 8s, pauses on hover) */}
             <div className="grid items-center gap-6 lg:grid-cols-12">
               {/* Prev Card Preview (Desktop) */}
               {filteredItems.length > 1 && (
