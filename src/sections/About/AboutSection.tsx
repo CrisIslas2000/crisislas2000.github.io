@@ -53,8 +53,8 @@ export function AboutSection({ t }: AboutSectionProps) {
     if (!started || typedLength >= fullText.length) return;
 
     const timer = window.setTimeout(() => {
-      setTypedLength((prev) => Math.min(prev + 4, fullText.length));
-    }, 16);
+      setTypedLength((prev) => Math.min(prev + 2, fullText.length));
+    }, 28);
 
     return () => window.clearTimeout(timer);
   }, [started, typedLength, fullText.length]);
