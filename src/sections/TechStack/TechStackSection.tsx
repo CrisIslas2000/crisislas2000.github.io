@@ -146,10 +146,10 @@ export function TechStackSection({
               onMouseLeave={() => setIsInspecting(false)}
               className="flex flex-col items-stretch gap-6 lg:flex-row"
             >
-              {/* Left: Pitch shrinks smoothly via animatable percentage width */}
+              {/* Left: Pitch shrinks subtly via animatable percentage width */}
               <div
                 className={`w-full transition-[width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                  isInspecting ? 'lg:w-[57%]' : 'lg:w-[66%]'
+                  isInspecting ? 'lg:w-[63%]' : 'lg:w-[66%]'
                 }`}
               >
                 <div className="relative overflow-hidden rounded-2xl border border-[#2563EB]/50 bg-[#080F1E] p-4 sm:p-6">
@@ -316,11 +316,11 @@ export function TechStackSection({
                 </div>
               </div>
 
-              {/* Right: Inspector expands smoothly via animatable percentage width */}
+              {/* Right: Inspector expands subtly to draw attention without ballooning */}
               <aside
-                className={`flex w-full flex-col justify-between rounded-2xl border bg-white p-6 transition-[width,border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-[#14243D]/85 ${
+                className={`flex w-full flex-col justify-between rounded-2xl border bg-white p-6 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-[#14243D]/85 ${
                   isInspecting
-                    ? 'border-[#2563EB] shadow-xl shadow-[#2563EB]/15 lg:w-[43%] dark:border-[#63B3FA]'
+                    ? 'scale-[1.015] border-[#2563EB] shadow-lg shadow-[#2563EB]/15 lg:w-[37%] dark:border-[#63B3FA]'
                     : 'border-slate-200 lg:w-[34%] dark:border-slate-800'
                 }`}
               >
@@ -340,22 +340,11 @@ export function TechStackSection({
                   </div>
 
                   <div className="mt-5 flex items-center gap-3.5">
-                    <div
-                      className={`flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 transition-all duration-300 dark:border-slate-700 dark:bg-[#080F1E] ${
-                        isInspecting ? 'h-14 w-14 scale-105' : 'h-12 w-12'
-                      }`}
-                    >
-                      <TechLogo
-                        name={selectedName}
-                        className={isInspecting ? 'h-8 w-8' : 'h-7 w-7'}
-                      />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-[#080F1E]">
+                      <TechLogo name={selectedName} className="h-7 w-7" />
                     </div>
                     <div>
-                      <h4
-                        className={`font-display font-bold text-slate-900 transition-all duration-300 dark:text-[#F1F5F9] ${
-                          isInspecting ? 'text-3xl' : 'text-2xl'
-                        }`}
-                      >
+                      <h4 className="font-display text-2xl font-bold text-slate-900 dark:text-[#F1F5F9]">
                         {selectedName}
                       </h4>
                       <p className="font-mono text-xs text-slate-500 dark:text-[#94A3B8]">
@@ -368,11 +357,7 @@ export function TechStackSection({
                     </div>
                   </div>
 
-                  <p
-                    className={`mt-4 leading-relaxed text-slate-600 transition-all duration-300 dark:text-[#94A3B8] ${
-                      isInspecting ? 'text-base text-slate-800 dark:text-[#F1F5F9]/90' : 'text-sm'
-                    }`}
-                  >
+                  <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-[#94A3B8]">
                     {selectedStarter?.description[language] ??
                       selectedBench?.description[language] ??
                       activeZone?.description[language]}
