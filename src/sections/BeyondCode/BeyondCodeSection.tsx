@@ -77,7 +77,7 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
           </p>
         </div>
 
-        {/* Propuesta C: 3 Cards with Left Vertical Accent Bar + Centered Icon */}
+        {/* 3 Cards with Hover Animation */}
         <div className="grid gap-5 md:grid-cols-3">
           {t.cards.map((card, idx) => {
             const leftBorder = cardLeftBorders[idx] ?? 'border-l-2 border-l-[#2563EB]';
@@ -86,7 +86,7 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
                 key={card.id}
                 className={`card-interactive group rounded-xl border border-slate-200 ${leftBorder} bg-white p-6 hover:border-[#2563EB]/50 dark:border-slate-800 dark:bg-[#14243D]/75 dark:hover:border-[#63B3FA]/40`}
               >
-                <div className="mb-5 flex justify-center transition-transform duration-300 group-hover:scale-105">
+                <div className="mb-5 flex justify-center transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
                   <CardIcon id={card.id} />
                 </div>
                 <h3 className="font-display text-lg font-bold text-slate-900 dark:text-[#F1F5F9]">
@@ -100,7 +100,7 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
           })}
         </div>
 
-        {/* Discreet Corner Lucha-Mask Easter Egg Trigger (Propuesta C bottom-right) */}
+        {/* Discreet Corner Lucha-Mask Easter Egg Trigger */}
         <div className="mt-6 flex justify-end">
           <button
             type="button"
@@ -108,39 +108,54 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
             aria-expanded={mascotOpen}
             aria-label={t.easterEggTrigger}
             title={t.easterEggTrigger}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 font-mono text-[11px] text-slate-500 transition-colors hover:border-[#2563EB] hover:text-[#2563EB] dark:border-slate-800 dark:bg-[#14243D]/60 dark:text-[#63B3FA] dark:hover:border-[#63B3FA]"
+            className="group inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-[11px] text-slate-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#2563EB] hover:text-[#2563EB] hover:shadow-md hover:shadow-[#2563EB]/20 dark:border-slate-800 dark:bg-[#14243D]/60 dark:text-[#63B3FA] dark:hover:border-[#63B3FA]"
           >
-            <LuchaMascot className="h-5 w-5" />
+            <LuchaMascot className="h-5 w-5 transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
             <span className="hidden sm:inline">{t.easterEggTrigger}</span>
           </button>
         </div>
 
+        {/* Mini Lucha Libre Ring for Kemonito-inspired Mascot */}
         {mascotOpen && (
           <div
             role="region"
             aria-label={t.easterEggTitle}
-            className="mt-4 flex flex-col items-start justify-between gap-4 rounded-xl border border-[#2563EB]/40 bg-slate-50 p-5 sm:flex-row sm:items-center dark:bg-[#14243D]/90"
+            className="relative mt-4 overflow-hidden rounded-2xl border border-[#2563EB]/50 bg-[#080F1E] p-6 text-[#F1F5F9] shadow-xl shadow-[#2563EB]/15"
           >
-            <div className="flex items-center gap-4">
-              <LuchaMascot className="h-14 w-14 shrink-0" />
-              <div>
-                <h4 className="font-display text-base font-bold text-slate-900 dark:text-[#F1F5F9]">
-                  {t.easterEggTitle}
-                </h4>
-                <p className="mt-1 text-sm text-slate-600 dark:text-[#94A3B8]">
-                  {t.easterEggText}
-                </p>
-              </div>
+            {/* 3 Ring Ropes + Corner Posts */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-3 flex flex-col gap-2">
+              <span className="h-[1.5px] w-full bg-[#2563EB]/60" />
+              <span className="h-[1.5px] w-full bg-[#F1F5F9]/40" />
+              <span className="h-[1.5px] w-full bg-[#A50044]/70" />
             </div>
-            <button
-              type="button"
-              onClick={() => setMascotOpen(false)}
-              aria-label={t.easterEggClose}
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 font-mono text-xs text-slate-700 hover:border-[#2563EB] dark:border-slate-700 dark:text-[#F1F5F9]"
-            >
-              <X className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>{t.easterEggClose}</span>
-            </button>
+            <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 top-0 w-2 bg-gradient-to-b from-[#2563EB] to-[#14243D]" />
+            <div aria-hidden="true" className="pointer-events-none absolute bottom-0 right-0 top-0 w-2 bg-gradient-to-b from-[#C8102E] to-[#14243D]" />
+
+            <div className="relative z-10 flex flex-col items-start justify-between gap-4 pt-3 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-4">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-[#2563EB]/40 bg-[#14243D]/80">
+                  <LuchaMascot className="h-16 w-16 animate-bounce" />
+                </div>
+                <div>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#63B3FA]">
+                    RING AZUL · LUCHA LIBRE MEXICANA
+                  </span>
+                  <h4 className="mt-0.5 font-display text-lg font-bold text-[#F1F5F9]">
+                    {t.easterEggTitle}
+                  </h4>
+                  <p className="mt-1 text-sm text-[#94A3B8]">{t.easterEggText}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMascotOpen(false)}
+                aria-label={t.easterEggClose}
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-[#14243D] px-3 py-1.5 font-mono text-xs text-[#F1F5F9] transition-colors hover:border-[#63B3FA]"
+              >
+                <X className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>{t.easterEggClose}</span>
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -31,24 +31,24 @@ export function ExperienceSection({ items, language, t }: ExperienceSectionProps
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {publishedItems.map((item) => (
               <div
                 key={item.id}
-                className="grid gap-4 sm:grid-cols-12 sm:items-start"
+                className="group grid gap-4 sm:grid-cols-12 sm:items-start"
               >
-                {/* Left Period Column (Propuesta A) */}
-                <div className="pt-1 font-mono text-xs text-slate-500 sm:col-span-3 sm:text-right sm:pr-6 dark:text-[#94A3B8]">
+                {/* Left Period Column with hover highlight */}
+                <div className="pt-1 font-mono text-xs text-slate-500 transition-colors duration-300 group-hover:text-[#2563EB] sm:col-span-3 sm:pr-6 sm:text-right dark:text-[#94A3B8] dark:group-hover:text-[#63B3FA]">
                   {item.period[language]}
                 </div>
 
-                {/* Right Timeline Card */}
-                <div className="relative border-l border-slate-300 pl-6 sm:col-span-9 dark:border-[#2563EB]/40">
+                {/* Right Timeline Card with Slide & Pulse Node */}
+                <div className="relative border-l border-slate-300 pl-6 transition-colors duration-300 group-hover:border-[#2563EB] sm:col-span-9 dark:border-[#2563EB]/40 dark:group-hover:border-[#63B3FA]">
                   <span
                     aria-hidden="true"
-                    className="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-[#2563EB] ring-4 ring-[#2563EB]/20"
+                    className="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-[#2563EB] ring-4 ring-[#2563EB]/20 transition-all duration-300 group-hover:scale-125 group-hover:bg-[#63B3FA] group-hover:ring-[#63B3FA]/35"
                   />
-                  <div className="card-interactive rounded-xl border border-slate-200 bg-white p-5 hover:border-[#2563EB]/50 dark:border-slate-800 dark:bg-[#14243D]/60 dark:hover:border-[#63B3FA]/40">
+                  <div className="card-interactive rounded-xl border border-slate-200 bg-white p-5 transition-all duration-300 group-hover:translate-x-1.5 hover:border-[#2563EB]/60 dark:border-slate-800 dark:bg-[#14243D]/60 dark:hover:border-[#63B3FA]/50">
                     <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
                       {item.role[language]} —{' '}
                       <span className="text-[#2563EB] dark:text-[#63B3FA]">
@@ -77,7 +77,7 @@ export function ExperienceSection({ items, language, t }: ExperienceSectionProps
                         {item.technologies.map((tech) => (
                           <span
                             key={tech}
-                            className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-xs text-slate-700 dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]"
+                            className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-xs text-slate-700 transition-colors group-hover:border-[#2563EB]/40 dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]"
                           >
                             {tech}
                           </span>

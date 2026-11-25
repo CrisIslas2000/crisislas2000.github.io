@@ -32,7 +32,7 @@ export function EducationSection({
 
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Academic Education */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-8 lg:col-span-2 dark:border-slate-800 dark:bg-[#14243D]/70">
+          <div className="card-interactive rounded-2xl border border-slate-200 bg-white p-8 hover:border-[#2563EB]/50 lg:col-span-2 dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]/40">
             <div className="flex items-center gap-2.5">
               <GraduationCap className="h-5 w-5 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
               <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
@@ -49,7 +49,7 @@ export function EducationSection({
                 {publishedEdu.map((edu) => (
                   <li
                     key={edu.id}
-                    className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700/80 dark:bg-[#080F1E]"
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-4 transition-all duration-300 hover:translate-x-1 hover:border-[#2563EB]/50 dark:border-slate-700/80 dark:bg-[#080F1E] dark:hover:border-[#63B3FA]/50"
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <p className="font-display text-base font-semibold text-slate-900 dark:text-[#F1F5F9]">
@@ -110,7 +110,7 @@ export function EducationSection({
           </div>
 
           {/* Languages */}
-          <aside className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-[#14243D]/70">
+          <aside className="card-interactive rounded-2xl border border-slate-200 bg-white p-8 hover:border-[#2563EB]/50 dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]/40">
             <div className="flex items-center gap-2.5">
               <Languages className="h-5 w-5 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
               <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
@@ -122,7 +122,7 @@ export function EducationSection({
               {publishedLangs.map((item) => (
                 <li
                   key={item.id}
-                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700/80 dark:bg-[#080F1E]"
+                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 transition-all duration-300 hover:translate-x-1 hover:border-[#2563EB]/50 dark:border-slate-700/80 dark:bg-[#080F1E] dark:hover:border-[#63B3FA]/50"
                 >
                   <span className="text-sm font-medium text-slate-900 dark:text-[#F1F5F9]">
                     {item.language[language]}

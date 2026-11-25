@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LayoutGrid, Shield, Star } from 'lucide-react';
+import { LayoutGrid, Shield, Star, Terminal } from 'lucide-react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { TechLogo } from '@/components/shared/TechLogo';
 import { tacticalBench, tacticalStarters } from '@/data/techStack';
@@ -21,6 +21,7 @@ export function TechStackSection({
 }: TechStackSectionProps) {
   const [viewMode, setViewMode] = useState<'both' | 'tactical' | 'conventional'>('both');
   const [selectedName, setSelectedName] = useState<string>('Java');
+  const [isInspecting, setIsInspecting] = useState(false);
 
   const goalkeeper = tacticalStarters.filter((p) => p.zone === 'goalkeeper');
   const defenders = tacticalStarters.filter((p) => p.zone === 'defense');
@@ -33,17 +34,23 @@ export function TechStackSection({
     (z) => z.id === (selectedStarter?.zone ?? selectedBench?.zone ?? 'midfield')
   );
 
+  const handleSelectTech = (name: string) => {
+    setSelectedName(name);
+    setIsInspecting(true);
+  };
+
   const renderPitchPlayer = (player: (typeof tacticalStarters)[number]) => {
     const isSelected = selectedName === player.name;
     return (
       <button
         key={player.id}
         type="button"
-        onClick={() => setSelectedName(player.name)}
+        onClick={() => handleSelectTech(player.name)}
+        onMouseEnter={() => handleSelectTech(player.name)}
         aria-pressed={isSelected}
         className={`group relative flex flex-col items-center gap-1 rounded-xl border px-2.5 py-2 text-center transition-all duration-200 hover:-translate-y-0.5 ${
           isSelected
-            ? 'border-[#63B3FA] bg-[#2563EB]/25 ring-2 ring-[#63B3FA]/50'
+            ? 'scale-105 border-[#63B3FA] bg-[#2563EB]/30 ring-2 ring-[#63B3FA]/60'
             : 'border-[#2563EB]/40 bg-[#080F1E]/85 hover:border-[#63B3FA]/80 hover:bg-[#14243D]'
         }`}
       >
@@ -55,7 +62,7 @@ export function TechStackSection({
             C
           </span>
         )}
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#14243D] border border-slate-700/80">
+        <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-700/80 bg-[#14243D] transition-transform duration-200 group-hover:scale-110">
           <TechLogo name={player.name} className="h-4 w-4" />
         </span>
         <span className="font-mono text-[10px] font-semibold leading-tight text-[#F1F5F9]">
@@ -118,7 +125,7 @@ export function TechStackSection({
           </div>
         </div>
 
-        {/* Real 4-3-3 Football Pitch + Bench/Reserves + Inspector */}
+        {/* Real 4-3-3 Football Pitch + Bench/Reserves + Expand-on-Hover Inspector */}
         {(viewMode === 'both' || viewMode === 'tactical') && (
           <div className="mb-16">
             <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -135,11 +142,17 @@ export function TechStackSection({
               </span>
             </div>
 
-            <div className="grid items-stretch gap-6 lg:grid-cols-12">
-              {/* Left: Realistic Tactical Pitch (4-3-3) */}
-              <div className="lg:col-span-8">
+            <div
+              onMouseLeave={() => setIsInspecting(false)}
+              className="grid items-stretch gap-6 lg:grid-cols-12"
+            >
+              {/* Left: Pitch shrinks smoothly on hover/inspect to give more space to Inspector */}
+              <div
+                className={`transition-all duration-300 ${
+                  isInspecting ? 'lg:col-span-7' : 'lg:col-span-8'
+                }`}
+              >
                 <div className="relative overflow-hidden rounded-2xl border border-[#2563EB]/50 bg-[#080F1E] p-4 sm:p-6">
-                  {/* Subtle Alternating Pitch Turf Stripes */}
                   <div
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 opacity-35"
@@ -149,14 +162,12 @@ export function TechStackSection({
                     }}
                   />
 
-                  {/* SVG Football Pitch Markings */}
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 800 440"
                     preserveAspectRatio="none"
                     className="pointer-events-none absolute inset-0 h-full w-full"
                   >
-                    {/* Outer touchline */}
                     <rect
                       x="18"
                       y="18"
@@ -168,7 +179,6 @@ export function TechStackSection({
                       strokeOpacity="0.45"
                       strokeWidth="2"
                     />
-                    {/* Halfway line */}
                     <line
                       x1="400"
                       y1="18"
@@ -178,7 +188,6 @@ export function TechStackSection({
                       strokeOpacity="0.4"
                       strokeWidth="2"
                     />
-                    {/* Center circle & spot */}
                     <circle
                       cx="400"
                       cy="220"
@@ -189,7 +198,6 @@ export function TechStackSection({
                       strokeWidth="2"
                     />
                     <circle cx="400" cy="220" r="4" fill="#63B3FA" fillOpacity="0.6" />
-                    {/* Left Penalty Area (Goalkeeper side) */}
                     <rect
                       x="18"
                       y="110"
@@ -210,7 +218,6 @@ export function TechStackSection({
                       strokeOpacity="0.35"
                       strokeWidth="1.5"
                     />
-                    {/* Right Penalty Area (Forward side) */}
                     <rect
                       x="677"
                       y="110"
@@ -233,9 +240,7 @@ export function TechStackSection({
                     />
                   </svg>
 
-                  {/* 4-3-3 Formation Grid */}
                   <div className="relative z-10 grid min-h-[340px] grid-cols-1 gap-5 py-2 sm:grid-cols-4 sm:items-center">
-                    {/* GK (1) */}
                     <div className="flex flex-col items-center gap-2">
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         POR
@@ -245,7 +250,6 @@ export function TechStackSection({
                       </div>
                     </div>
 
-                    {/* DEF (4) */}
                     <div className="flex flex-col items-center gap-2">
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         DEF (4)
@@ -255,7 +259,6 @@ export function TechStackSection({
                       </div>
                     </div>
 
-                    {/* MID (3) */}
                     <div className="flex flex-col items-center gap-2">
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         MED (3)
@@ -265,7 +268,6 @@ export function TechStackSection({
                       </div>
                     </div>
 
-                    {/* FWD (3) */}
                     <div className="flex flex-col items-center gap-2">
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         DEL (3)
@@ -277,7 +279,7 @@ export function TechStackSection({
                   </div>
                 </div>
 
-                {/* Bench / Reserves Bar */}
+                {/* Bench / Reserves Bar (also activates inspector on hover) */}
                 <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-[#14243D]/70">
                   <div className="mb-3 flex items-center justify-between">
                     <span className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-[#63B3FA]">
@@ -294,11 +296,12 @@ export function TechStackSection({
                         <button
                           key={tech.name}
                           type="button"
-                          onClick={() => setSelectedName(tech.name)}
+                          onClick={() => handleSelectTech(tech.name)}
+                          onMouseEnter={() => handleSelectTech(tech.name)}
                           aria-pressed={isSelected}
-                          className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-mono text-xs transition-colors ${
+                          className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-mono text-xs transition-all duration-200 hover:-translate-y-0.5 ${
                             isSelected
-                              ? 'border border-[#2563EB] bg-[#2563EB] text-white'
+                              ? 'border border-[#2563EB] bg-[#2563EB] text-white shadow-sm'
                               : tech.usage === 'exploring'
                                 ? 'border border-dashed border-[#63B3FA]/60 bg-[#63B3FA]/10 text-slate-700 hover:border-[#2563EB] dark:text-[#63B3FA]'
                                 : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#2563EB] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
@@ -313,8 +316,14 @@ export function TechStackSection({
                 </div>
               </div>
 
-              {/* Right: Interactive Player / Tech Inspector */}
-              <aside className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 lg:col-span-4 dark:border-slate-800 dark:bg-[#14243D]/80">
+              {/* Right: Inspector expands smoothly when hovering/selecting */}
+              <aside
+                className={`flex flex-col justify-between rounded-2xl border bg-white p-6 transition-all duration-300 dark:bg-[#14243D]/85 ${
+                  isInspecting
+                    ? 'border-[#2563EB] shadow-xl shadow-[#2563EB]/15 lg:col-span-5 dark:border-[#63B3FA]'
+                    : 'border-slate-200 lg:col-span-4 dark:border-slate-800'
+                }`}
+              >
                 <div>
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1.5 rounded-md border border-[#2563EB]/40 bg-[#2563EB]/10 px-2.5 py-1 font-mono text-xs font-semibold text-[#2563EB] dark:text-[#63B3FA]">
@@ -330,12 +339,23 @@ export function TechStackSection({
                     )}
                   </div>
 
-                  <div className="mt-5 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-[#080F1E]">
-                      <TechLogo name={selectedName} className="h-7 w-7" />
+                  <div className="mt-5 flex items-center gap-3.5">
+                    <div
+                      className={`flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 transition-all duration-300 dark:border-slate-700 dark:bg-[#080F1E] ${
+                        isInspecting ? 'h-14 w-14 scale-105' : 'h-12 w-12'
+                      }`}
+                    >
+                      <TechLogo
+                        name={selectedName}
+                        className={isInspecting ? 'h-8 w-8' : 'h-7 w-7'}
+                      />
                     </div>
                     <div>
-                      <h4 className="font-display text-2xl font-bold text-slate-900 dark:text-[#F1F5F9]">
+                      <h4
+                        className={`font-display font-bold text-slate-900 transition-all duration-300 dark:text-[#F1F5F9] ${
+                          isInspecting ? 'text-3xl' : 'text-2xl'
+                        }`}
+                      >
                         {selectedName}
                       </h4>
                       <p className="font-mono text-xs text-slate-500 dark:text-[#94A3B8]">
@@ -348,7 +368,11 @@ export function TechStackSection({
                     </div>
                   </div>
 
-                  <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-[#94A3B8]">
+                  <p
+                    className={`mt-4 leading-relaxed text-slate-600 transition-all duration-300 dark:text-[#94A3B8] ${
+                      isInspecting ? 'text-base text-slate-800 dark:text-[#F1F5F9]/90' : 'text-sm'
+                    }`}
+                  >
                     {selectedStarter?.description[language] ??
                       selectedBench?.description[language] ??
                       activeZone?.description[language]}
@@ -374,7 +398,7 @@ export function TechStackSection({
           </div>
         )}
 
-        {/* Conventional Categorized Stack (Name + Logo) */}
+        {/* Code-Module Styled Categorized Stack */}
         {(viewMode === 'both' || viewMode === 'conventional') && (
           <div>
             <div className="mb-6 flex flex-wrap items-center gap-5 font-mono text-xs">
@@ -392,27 +416,47 @@ export function TechStackSection({
               {categories.map((category) => (
                 <article
                   key={category.id}
-                  className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-[#14243D]/70"
+                  className="card-interactive overflow-hidden rounded-xl border border-slate-200 bg-white hover:border-[#2563EB]/60 dark:border-slate-800 dark:bg-[#0D172B] dark:hover:border-[#63B3FA]/50"
                 >
-                  <h3 className="font-display text-base font-semibold text-slate-900 dark:text-[#F1F5F9]">
-                    {category.title[language]}
-                  </h3>
-                  <ul className="mt-4 flex flex-wrap gap-2.5">
-                    {category.items.map((item) => (
-                      <li
-                        key={item.name}
-                        title={item.note?.[language]}
-                        className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-xs transition-transform duration-200 hover:-translate-y-0.5 ${
-                          item.usage === 'professional'
-                            ? 'border border-[#2563EB]/30 bg-[#2563EB]/10 text-[#1D4ED8] dark:text-[#F1F5F9]'
-                            : 'border border-dashed border-[#63B3FA]/50 bg-[#63B3FA]/10 text-slate-700 dark:text-[#63B3FA]'
-                        }`}
-                      >
-                        <TechLogo name={item.name} className="h-4 w-4 shrink-0" />
-                        <span>{item.name}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Developer Module Header */}
+                  <div className="flex items-center justify-between border-b border-slate-200 bg-slate-100/80 px-4 py-2.5 dark:border-slate-800 dark:bg-[#14243D]">
+                    <span className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-slate-800 dark:text-[#63B3FA]">
+                      <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span>{`${category.id}.ts`}</span>
+                    </span>
+                    <span className="font-mono text-[10px] text-slate-500 dark:text-[#94A3B8]">
+                      {category.title[language]}
+                    </span>
+                  </div>
+
+                  <div className="p-5">
+                    <p className="mb-3 font-mono text-[11px] text-slate-400 dark:text-slate-500">
+                      <span className="text-[#2563EB] dark:text-[#63B3FA]">export const</span>{' '}
+                      {category.id} = [
+                    </p>
+                    <ul className="flex flex-wrap gap-2 pl-2">
+                      {category.items.map((item) => (
+                        <li
+                          key={item.name}
+                          title={item.note?.[language]}
+                          className={`group/item inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 font-mono text-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${
+                            item.usage === 'professional'
+                              ? 'border border-[#2563EB]/30 bg-[#2563EB]/10 text-[#1D4ED8] hover:border-[#2563EB] dark:text-[#F1F5F9]'
+                              : 'border border-dashed border-[#63B3FA]/50 bg-[#63B3FA]/10 text-slate-700 hover:border-[#63B3FA] dark:text-[#63B3FA]'
+                          }`}
+                        >
+                          <TechLogo
+                            name={item.name}
+                            className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover/item:scale-110"
+                          />
+                          <span>{item.name}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-3 font-mono text-[11px] text-slate-400 dark:text-slate-500">
+                      ];
+                    </p>
+                  </div>
                 </article>
               ))}
             </div>
