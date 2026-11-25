@@ -19,11 +19,14 @@ const CATEGORIES: ProjectCategory[] = [
   'Automatización',
 ];
 
+const ROULETTE_DURATION_MS = 8000;
+
 export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSectionProps) {
   const [selectedCategory, setSelectedCategory] = useState<'ALL' | ProjectCategory>('ALL');
   const [layoutMode, setLayoutMode] = useState<'roulette' | 'grid'>('roulette');
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [elapsedMs, setElapsedMs] = useState(0);
 
   const publishedItems = items.filter((item) => item.published);
   const availableCategories = CATEGORIES.filter((cat) =>
@@ -45,25 +48,38 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
     if (reduced) return;
 
     const timer = window.setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % filteredItems.length);
-    }, 8000);
+      setElapsedMs((prev) => {
+        const next = prev + 100;
+        if (next >= ROULETTE_DURATION_MS) {
+          setActiveIndex((idx) => (idx + 1) % filteredItems.length);
+          return 0;
+        }
+        return next;
+      });
+    }, 100);
 
     return () => window.clearInterval(timer);
   }, [layoutMode, filteredItems.length, isPaused]);
 
+  const remainingPercent = Math.max(0, 100 - (elapsedMs / ROULETTE_DURATION_MS) * 100);
+  const remainingSeconds = Math.max(1, Math.ceil((ROULETTE_DURATION_MS - elapsedMs) / 1000));
+
   const handleCategoryChange = (category: 'ALL' | ProjectCategory) => {
     setSelectedCategory(category);
     setActiveIndex(0);
+    setElapsedMs(0);
   };
 
   const handlePrev = () => {
     if (filteredItems.length === 0) return;
     setActiveIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
+    setElapsedMs(0);
   };
 
   const handleNext = () => {
     if (filteredItems.length === 0) return;
     setActiveIndex((prev) => (prev + 1) % filteredItems.length);
+    setElapsedMs(0);
   };
 
   const renderProjectCard = (project: ProjectItem, index: number, isFeatured = false) => (
@@ -75,11 +91,23 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
           : 'border-slate-200 hover:border-[#2563EB] dark:border-slate-800 dark:hover:border-[#63B3FA]'
       }`}
     >
-      {/* Thin Editorial Sports Top Bar */}
-      <div
-        aria-hidden="true"
-        className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-[#2563EB] via-[#A50044] to-[#C8102E]"
-      />
+      {/* Top Bar: Countdown Progress in Roulette Mode, Static Accent in Grid Mode */}
+      {isFeatured && layoutMode === 'roulette' && filteredItems.length > 1 ? (
+        <div
+          aria-hidden="true"
+          className="absolute left-0 right-0 top-0 h-1 bg-slate-200 dark:bg-[#080F1E]"
+        >
+          <div
+            className="h-full bg-gradient-to-r from-[#2563EB] via-[#A50044] to-[#C8102E] transition-[width] duration-100 ease-linear"
+            style={{ width: `${remainingPercent}%` }}
+          />
+        </div>
+      ) : (
+        <div
+          aria-hidden="true"
+          className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-[#2563EB] via-[#A50044] to-[#C8102E]"
+        />
+      )}
 
       <div>
         <div className="flex items-start justify-between gap-3">
@@ -171,7 +199,9 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
             )}
           </div>
           <span className="font-mono text-[10px] text-slate-500 dark:text-[#94A3B8]">
-            {project.status[language]}
+            {isFeatured && layoutMode === 'roulette' && filteredItems.length > 1
+              ? `${project.status[language]} · ${remainingSeconds}s`
+              : project.status[language]}
           </span>
         </div>
       </div>
