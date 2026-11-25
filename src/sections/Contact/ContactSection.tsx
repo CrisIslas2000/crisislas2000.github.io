@@ -101,7 +101,7 @@ export function ContactSection({ profile, language, t, onDownloadCv }: ContactSe
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap items-center gap-4">
           <button
             type="button"
             onClick={onDownloadCv}
@@ -110,6 +110,16 @@ export function ContactSection({ profile, language, t, onDownloadCv }: ContactSe
             <Download className="h-4 w-4" aria-hidden="true" />
             <span>{t.downloadCv}</span>
           </button>
+
+          <a
+            href={`${profile.githubUrl}?tab=repositories`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition-colors hover:border-[#2563EB] hover:text-[#2563EB] dark:border-slate-700 dark:bg-[#14243D] dark:text-[#F1F5F9] dark:hover:border-[#63B3FA]"
+          >
+            <Github className="h-4 w-4" aria-hidden="true" />
+            <span>{language === 'es' ? 'Repositorios en GitHub' : 'GitHub Repositories'}</span>
+          </a>
         </div>
       </div>
     </section>

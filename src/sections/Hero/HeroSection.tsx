@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Download, Github, Linkedin, Mail } from 'lucide-react';
 import type { Translations } from '@/i18n/translations';
 import type { Language, ProfileData } from '@/types/portfolio';
@@ -9,7 +10,30 @@ interface HeroSectionProps {
   onDownloadCv: () => void;
 }
 
+const ROTATING_SPECIALTIES = [
+  'Software Developer',
+  'Full Stack Development',
+  'Backend Engineering',
+  'REST API & System Integration',
+  'Build. Learn. Evolve.',
+];
+
 export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionProps) {
+  const [specIndex, setSpecIndex] = useState(0);
+
+  useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const timer = window.setInterval(() => {
+      setSpecIndex((prev) => (prev + 1) % ROTATING_SPECIALTIES.length);
+    }, 2800);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
   return (
     <section
       id="inicio"
@@ -18,14 +42,23 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
         {/* Left: Propuesta A Editorial Intro */}
         <div className="order-2 lg:order-1 lg:col-span-7">
-          <div className="inline-flex items-center rounded-md border border-[#2563EB]/30 bg-[#14243D]/10 px-3 py-1 font-mono text-xs font-medium text-[#1D4ED8] dark:bg-[#14243D] dark:text-[#63B3FA]">
-            {profile.role[language]}
+          <div className="inline-flex items-center gap-2 rounded-md border border-[#2563EB]/30 bg-[#14243D]/10 px-3 py-1 font-mono text-xs font-medium text-[#1D4ED8] dark:bg-[#14243D] dark:text-[#63B3FA]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB] dark:bg-[#63B3FA]" />
+            <span>{profile.role[language]}</span>
           </div>
 
           <h1 className="mt-5 font-display text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl dark:text-[#F1F5F9]">
             {profile.name}
             <span className="text-[#2563EB]">.</span>
           </h1>
+
+          {/* Rotating JetBrains Mono Specialization (inspired by GitHub README typing SVG) */}
+          <p
+            aria-live="polite"
+            className="mt-2 font-mono text-sm font-semibold text-[#2563EB] sm:text-base dark:text-[#63B3FA]"
+          >
+            &gt; {ROTATING_SPECIALTIES[specIndex]}
+          </p>
 
           <p className="mt-3 font-display text-2xl font-medium text-slate-700 sm:text-3xl dark:text-[#F1F5F9]/90">
             {profile.tagline[language]}
@@ -35,7 +68,7 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             {profile.headlineBio[language]}
           </p>
 
-          {/* CTAs matching Propuesta A */}
+          {/* CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3.5">
             <button
               type="button"
@@ -54,7 +87,7 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             </a>
           </div>
 
-          {/* Square Social Icon Buttons matching Propuesta A */}
+          {/* Square Social Icon Buttons */}
           <div className="mt-6 flex items-center gap-3">
             <a
               href={profile.githubUrl}
@@ -90,10 +123,9 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
           </div>
         </div>
 
-        {/* Right: Borderless Cutout Portrait with Soft Radial Blue Aura (Propuesta A) */}
+        {/* Right: Borderless Cutout Portrait with Soft Radial Blue Aura */}
         <div className="order-1 flex justify-center lg:order-2 lg:col-span-5">
           <div className="relative flex w-full max-w-sm items-center justify-center">
-            {/* Soft Radial Blue Glow behind portrait */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute h-72 w-72 rounded-full bg-[#2563EB]/30 blur-3xl dark:bg-[#2563EB]/35"
