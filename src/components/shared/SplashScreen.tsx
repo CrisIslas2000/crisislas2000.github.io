@@ -1,24 +1,19 @@
 import { useEffect, useState } from 'react';
 import { BrandLogo } from '@/components/shared/BrandLogo';
 
-const SESSION_KEY = 'ci-splash-seen';
-
 /**
- * Pantalla de carga minimalista (0.9s, una vez por sesión, respeta prefers-reduced-motion).
+ * Pantalla de carga minimalista en cada carga de la página (respeta prefers-reduced-motion).
  */
 export function SplashScreen() {
   const [visible, setVisible] = useState(() => {
     if (typeof window === 'undefined') return false;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return false;
-    return window.sessionStorage.getItem(SESSION_KEY) !== '1';
+    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   });
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
     if (!visible) return;
 
-    window.sessionStorage.setItem(SESSION_KEY, '1');
     const fadeTimer = window.setTimeout(() => setFading(true), 700);
     const hideTimer = window.setTimeout(() => setVisible(false), 1050);
 
