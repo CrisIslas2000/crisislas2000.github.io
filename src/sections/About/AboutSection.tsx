@@ -28,9 +28,14 @@ export function AboutSection({ t }: AboutSectionProps) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting) {
+        const entry = entries[0];
+        if (!entry) return;
+        if (entry.isIntersecting) {
+          setTypedLength(0);
           setStarted(true);
-          observer.disconnect();
+        } else {
+          setStarted(false);
+          setTypedLength(0);
         }
       },
       { threshold: 0.25 }
