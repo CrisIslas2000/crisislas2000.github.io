@@ -1,0 +1,141 @@
+import { Award, GraduationCap, Languages } from 'lucide-react';
+import { SectionHeader } from '@/components/shared/SectionHeader';
+import type { Translations } from '@/i18n/translations';
+import type { CertificationItem, EducationItem, Language, LanguageSkill } from '@/types/portfolio';
+
+interface EducationSectionProps {
+  education: EducationItem[];
+  certifications: CertificationItem[];
+  languages: LanguageSkill[];
+  language: Language;
+  t: Translations['education'];
+}
+
+export function EducationSection({
+  education,
+  certifications,
+  languages,
+  language,
+  t,
+}: EducationSectionProps) {
+  const publishedEdu = education.filter((item) => item.published);
+  const publishedCerts = certifications.filter((item) => item.published);
+  const publishedLangs = languages.filter((item) => item.published);
+
+  return (
+    <section
+      id="formacion"
+      className="border-b border-slate-200/80 py-20 sm:py-28 dark:border-slate-800/80"
+    >
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <SectionHeader eyebrow={t.eyebrow} title={t.title} />
+
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Academic Education */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 lg:col-span-2 dark:border-slate-800 dark:bg-[#14243D]/70">
+            <div className="flex items-center gap-2.5">
+              <GraduationCap className="h-5 w-5 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
+              <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
+                {t.title}
+              </h3>
+            </div>
+
+            {publishedEdu.length === 0 ? (
+              <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-[#94A3B8]">
+                {t.pendingNotice}
+              </p>
+            ) : (
+              <ul className="mt-4 space-y-4">
+                {publishedEdu.map((edu) => (
+                  <li
+                    key={edu.id}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700/80 dark:bg-[#080F1E]"
+                  >
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <p className="font-display text-base font-semibold text-slate-900 dark:text-[#F1F5F9]">
+                        {edu.degree[language]} — {edu.field[language]}
+                      </p>
+                      <span className="font-mono text-xs text-slate-500 dark:text-[#94A3B8]">
+                        {edu.period[language]}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-sm text-[#2563EB] dark:text-[#63B3FA]">
+                      {edu.institution}
+                    </p>
+                    <p className="mt-1 font-mono text-xs text-slate-600 dark:text-[#94A3B8]">
+                      {edu.status[language]}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* Certifications (solo se muestra cuando hay registros publicados) */}
+            {publishedCerts.length > 0 && (
+              <div className="mt-8 border-t border-slate-200 pt-6 dark:border-slate-700/70">
+                <div className="flex items-center gap-2.5">
+                  <Award className="h-5 w-5 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
+                  <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
+                    {t.certificationsTitle}
+                  </h3>
+                </div>
+
+                <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {publishedCerts.map((cert) => (
+                    <li
+                      key={cert.id}
+                      className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700/80 dark:bg-[#080F1E]"
+                    >
+                      <p className="font-display text-sm font-semibold text-slate-900 dark:text-[#F1F5F9]">
+                        {cert.name[language]}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-600 dark:text-[#94A3B8]">
+                        {cert.issuer} · {cert.date}
+                      </p>
+                      {cert.verificationUrl && (
+                        <a
+                          href={cert.verificationUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-block font-mono text-xs text-[#2563EB] hover:underline dark:text-[#63B3FA]"
+                        >
+                          {t.verifyLink}
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Languages */}
+          <aside className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-[#14243D]/70">
+            <div className="flex items-center gap-2.5">
+              <Languages className="h-5 w-5 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
+              <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
+                {t.languagesTitle}
+              </h3>
+            </div>
+
+            <ul className="mt-4 space-y-3">
+              {publishedLangs.map((item) => (
+                <li
+                  key={item.id}
+                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700/80 dark:bg-[#080F1E]"
+                >
+                  <span className="text-sm font-medium text-slate-900 dark:text-[#F1F5F9]">
+                    {item.language[language]}
+                  </span>
+                  <span className="font-mono text-xs text-[#2563EB] dark:text-[#63B3FA]">
+                    {item.level[language]}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
