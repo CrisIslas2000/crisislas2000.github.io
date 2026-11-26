@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { X } from 'lucide-react';
 import { LuchaMascot } from '@/components/shared/LuchaMascot';
 import type { Translations } from '@/i18n/translations';
 
@@ -57,7 +56,7 @@ const cardLeftBorders = [
 ];
 
 export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
-  const [mascotOpen, setMascotOpen] = useState(false);
+  const [activeCard, setActiveCard] = useState<string>('developer');
 
   return (
     <section
@@ -77,14 +76,30 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
           </p>
         </div>
 
-        {/* 3 Cards with Hover Animation */}
+        {/* 3 Cards: Hover/Click reveals dedicated personal visual panel below */}
         <div className="grid gap-5 md:grid-cols-3">
           {t.cards.map((card, idx) => {
             const leftBorder = cardLeftBorders[idx] ?? 'border-l-2 border-l-[#2563EB]';
+            const isSelected = activeCard === card.id;
+
             return (
               <article
                 key={card.id}
-                className={`card-interactive group rounded-xl border border-slate-200 ${leftBorder} bg-white p-6 hover:border-[#2563EB]/50 dark:border-slate-800 dark:bg-[#14243D]/75 dark:hover:border-[#63B3FA]/40`}
+                onMouseEnter={() => setActiveCard(card.id)}
+                onClick={() => setActiveCard(card.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setActiveCard(card.id);
+                  }
+                }}
+                className={`card-interactive group cursor-pointer rounded-xl border ${leftBorder} bg-white p-6 transition-all duration-300 dark:bg-[#14243D]/75 ${
+                  isSelected
+                    ? 'border-[#2563EB] shadow-lg shadow-[#2563EB]/15 dark:border-[#63B3FA]'
+                    : 'border-slate-200 hover:border-[#2563EB]/50 dark:border-slate-800'
+                }`}
               >
                 <div className="mb-5 flex justify-center transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
                   <CardIcon id={card.id} />
@@ -100,64 +115,108 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
           })}
         </div>
 
-        {/* Discreet Corner Lucha-Mask Easter Egg Trigger */}
-        <div className="mt-6 flex justify-end">
-          <button
-            type="button"
-            onClick={() => setMascotOpen((prev) => !prev)}
-            aria-expanded={mascotOpen}
-            aria-label={t.easterEggTrigger}
-            title={t.easterEggTrigger}
-            className="group inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-[11px] text-slate-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#2563EB] hover:text-[#2563EB] hover:shadow-md hover:shadow-[#2563EB]/20 dark:border-slate-800 dark:bg-[#14243D]/60 dark:text-[#63B3FA] dark:hover:border-[#63B3FA]"
-          >
-            <LuchaMascot className="h-5 w-5 transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
-            <span className="hidden sm:inline">{t.easterEggTrigger}</span>
-          </button>
-        </div>
-
-        {/* Mini Lucha Libre Ring for Kemonito-inspired Mascot */}
-        {mascotOpen && (
-          <div
-            role="region"
-            aria-label={t.easterEggTitle}
-            className="relative mt-4 overflow-hidden rounded-2xl border border-[#2563EB]/50 bg-[#080F1E] p-6 text-[#F1F5F9] shadow-xl shadow-[#2563EB]/15"
-          >
-            {/* 3 Ring Ropes + Corner Posts */}
-            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-3 flex flex-col gap-2">
-              <span className="h-[1.5px] w-full bg-[#2563EB]/60" />
-              <span className="h-[1.5px] w-full bg-[#F1F5F9]/40" />
-              <span className="h-[1.5px] w-full bg-[#A50044]/70" />
+        {/* Dynamic Spotlight Panel for the Active Card */}
+        <div className="mt-6 overflow-hidden rounded-2xl border border-[#2563EB]/40 bg-[#080F1E] p-6 text-[#F1F5F9] shadow-xl shadow-[#2563EB]/10 transition-all duration-300">
+          {activeCard === 'developer' && (
+            <div className="animate-roulette-slide grid items-center gap-6 md:grid-cols-12">
+              <div className="md:col-span-7">
+                <p className="font-mono text-[11px] uppercase tracking-widest text-[#63B3FA]">
+                  CLEAN CODE · ARCHITECTURE · JAVA
+                </p>
+                <blockquote className="mt-2 font-display text-lg font-semibold leading-snug text-[#F1F5F9]">
+                  &ldquo;Cualquiera puede escribir código que una computadora entienda; los buenos
+                  programadores escriben código que los humanos entienden.&rdquo;
+                </blockquote>
+                <p className="mt-2 font-mono text-xs text-[#94A3B8]">— Martin Fowler</p>
+              </div>
+              {/* Animated Layered Architecture Flow (Clean Code Visual) */}
+              <div className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-[#0D172B] p-4 md:col-span-5">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-[#94A3B8]">
+                  Arquitectura por Capas
+                </span>
+                <div className="flex w-full items-center justify-between gap-1.5 font-mono text-[11px]">
+                  <span className="animate-pulse rounded-md border border-[#2563EB]/60 bg-[#14243D] px-2.5 py-1.5 text-[#63B3FA]">
+                    Controller
+                  </span>
+                  <span className="text-[#2563EB]">→</span>
+                  <span className="rounded-md border border-[#63B3FA]/60 bg-[#14243D] px-2.5 py-1.5 text-[#F1F5F9]">
+                    Service
+                  </span>
+                  <span className="text-[#2563EB]">→</span>
+                  <span className="rounded-md border border-[#A50044]/60 bg-[#14243D] px-2.5 py-1.5 text-[#F1F5F9]">
+                    Repository
+                  </span>
+                </div>
+                <span className="font-mono text-[10px] text-[#63B3FA]">
+                  SOLID · Validación · Mantenibilidad
+                </span>
+              </div>
             </div>
-            <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 top-0 w-2 bg-gradient-to-b from-[#2563EB] to-[#14243D]" />
-            <div aria-hidden="true" className="pointer-events-none absolute bottom-0 right-0 top-0 w-2 bg-gradient-to-b from-[#C8102E] to-[#14243D]" />
+          )}
 
-            <div className="relative z-10 flex flex-col items-start justify-between gap-4 pt-3 sm:flex-row sm:items-center">
-              <div className="flex items-center gap-4">
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-[#2563EB]/40 bg-[#14243D]/80">
-                  <LuchaMascot className="h-16 w-16 animate-bounce" />
+          {activeCard === 'strategist' && (
+            <div className="animate-roulette-slide grid items-center gap-6 md:grid-cols-12">
+              <div className="md:col-span-8">
+                <p className="font-mono text-[11px] uppercase tracking-widest text-[#63B3FA]">
+                  VISIÓN TÁCTICA · INSPIRACIÓN #10
+                </p>
+                <p className="mt-2 font-display text-lg font-semibold leading-snug text-[#F1F5F9]">
+                  Leer la cancha antes de recibir el balón: así como un pase filtrado rompe líneas,
+                  una buena arquitectura resuelve el problema antes de escribir la primera línea de
+                  código.
+                </p>
+                <p className="mt-2 font-mono text-xs text-[#94A3B8]">
+                  Precisión · Creatividad · Trabajo en equipo
+                </p>
+              </div>
+              <div className="flex items-center justify-center md:col-span-4">
+                <div className="flex h-24 w-24 flex-col items-center justify-center rounded-2xl border-2 border-[#A50044] bg-gradient-to-b from-[#14243D] to-[#080F1E] shadow-lg">
+                  <span className="font-display text-3xl font-bold text-[#F1F5F9]">10</span>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#63B3FA]">
+                    Estratega
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeCard === 'wrestler' && (
+            <div className="animate-roulette-slide relative overflow-hidden rounded-xl border border-[#2563EB]/40 bg-[#050A14] p-5">
+              {/* Enhanced Mini Blue Lucha Ring */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-3 flex flex-col gap-2"
+              >
+                <span className="h-[1.5px] w-full bg-[#2563EB]/70" />
+                <span className="h-[1.5px] w-full bg-[#F1F5F9]/50" />
+                <span className="h-[1.5px] w-full bg-[#A50044]/75" />
+              </div>
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-0 left-0 top-0 w-2 bg-gradient-to-b from-[#2563EB] to-[#14243D]"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-0 right-0 top-0 w-2 bg-gradient-to-b from-[#C8102E] to-[#14243D]"
+              />
+
+              <div className="relative z-10 flex flex-col items-center gap-5 pt-3 sm:flex-row">
+                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-[#2563EB]/50 bg-[#14243D]/90 shadow-lg shadow-[#2563EB]/20">
+                  <LuchaMascot className="h-18 w-18 animate-bounce" />
                 </div>
                 <div>
                   <span className="font-mono text-[10px] uppercase tracking-widest text-[#63B3FA]">
-                    RING AZUL · LUCHA LIBRE MEXICANA
+                    RINCÓN AZUL · INSPIRACIÓN KEMONITO &amp; LUCHA LIBRE
                   </span>
-                  <h4 className="mt-0.5 font-display text-lg font-bold text-[#F1F5F9]">
+                  <h4 className="mt-1 font-display text-lg font-bold text-[#F1F5F9]">
                     {t.easterEggTitle}
                   </h4>
                   <p className="mt-1 text-sm text-[#94A3B8]">{t.easterEggText}</p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setMascotOpen(false)}
-                aria-label={t.easterEggClose}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-[#14243D] px-3 py-1.5 font-mono text-xs text-[#F1F5F9] transition-colors hover:border-[#63B3FA]"
-              >
-                <X className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>{t.easterEggClose}</span>
-              </button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </section>
   );

@@ -34,7 +34,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A] transition-colors dark:bg-[#080F1E] dark:text-[#F1F5F9]">
+    <div className="bg-thematic-watermarks min-h-screen bg-[#F8FAFC] text-[#0F172A] transition-colors dark:bg-[#080F1E] dark:text-[#F1F5F9]">
       <SplashScreen />
 
       {/* Skip to content for keyboard accessibility */}

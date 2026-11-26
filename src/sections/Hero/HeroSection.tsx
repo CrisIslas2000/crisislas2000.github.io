@@ -19,20 +19,45 @@ const ROTATING_SPECIALTIES = [
 ];
 
 export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionProps) {
-  const [specIndex, setSpecIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [charCount, setCharCount] = useState(0);
+  const [phase, setPhase] = useState<'typing' | 'pausing' | 'deleting'>('typing');
+
+  const currentWord = ROTATING_SPECIALTIES[wordIndex] ?? ROTATING_SPECIALTIES[0];
 
   useEffect(() => {
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      setCharCount(currentWord.length);
+      return;
+    }
 
-    const timer = window.setInterval(() => {
-      setSpecIndex((prev) => (prev + 1) % ROTATING_SPECIALTIES.length);
-    }, 2800);
+    let timer: number;
 
-    return () => window.clearInterval(timer);
-  }, []);
+    if (phase === 'typing') {
+      if (charCount < currentWord.length) {
+        timer = window.setTimeout(() => setCharCount((c) => c + 1), 42);
+      } else {
+        timer = window.setTimeout(() => setPhase('pausing'), 0);
+      }
+    } else if (phase === 'pausing') {
+      // Visible 2 seconds before erasing
+      timer = window.setTimeout(() => setPhase('deleting'), 2000);
+    } else {
+      if (charCount > 0) {
+        timer = window.setTimeout(() => setCharCount((c) => c - 1), 24);
+      } else {
+        timer = window.setTimeout(() => {
+          setWordIndex((idx) => (idx + 1) % ROTATING_SPECIALTIES.length);
+          setPhase('typing');
+        }, 120);
+      }
+    }
+
+    return () => window.clearTimeout(timer);
+  }, [charCount, currentWord.length, phase]);
 
   return (
     <section
@@ -52,11 +77,13 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             <span className="text-[#2563EB]">.</span>
           </h1>
 
+          {/* Typewriter with 2s hold + erase */}
           <p
             aria-live="polite"
-            className="mt-2 font-mono text-sm font-semibold text-[#2563EB] sm:text-base dark:text-[#63B3FA]"
+            className="mt-2 min-h-[1.75rem] font-mono text-sm font-semibold text-[#2563EB] sm:text-base dark:text-[#63B3FA]"
           >
-            &gt; {ROTATING_SPECIALTIES[specIndex]}
+            &gt; {currentWord.slice(0, charCount)}
+            <span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-[#2563EB] align-middle dark:bg-[#63B3FA]" />
           </p>
 
           <p className="mt-3 font-display text-2xl font-medium text-slate-700 sm:text-3xl dark:text-[#F1F5F9]/90">
@@ -93,7 +120,7 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             </a>
           </div>
 
-          {/* Enhanced Social Icon Buttons */}
+          {/* Social Icon Buttons */}
           <div className="mt-6 flex items-center gap-3">
             <a
               href={profile.githubUrl}
@@ -138,17 +165,17 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
           </div>
         </div>
 
-        {/* Right: Interactive Borderless Portrait with Hover Zoom & Aura */}
+        {/* Right: Transparent PNG Portrait with Stronger Hover Zoom */}
         <div className="order-1 flex justify-center lg:order-2 lg:col-span-5">
           <div className="group relative flex w-full max-w-sm items-center justify-center">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute h-72 w-72 rounded-full bg-[#2563EB]/30 blur-3xl transition-all duration-500 group-hover:scale-110 group-hover:bg-[#2563EB]/45 dark:bg-[#2563EB]/35"
+              className="pointer-events-none absolute h-72 w-72 rounded-full bg-[#2563EB]/25 blur-3xl transition-all duration-500 group-hover:scale-115 group-hover:bg-[#2563EB]/40 dark:bg-[#2563EB]/35"
             />
             <img
               src={profile.portraitSrc}
               alt={t.portraitAlt}
-              className="relative z-10 h-auto w-full max-w-[340px] rounded-2xl object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105 [mask-image:linear-gradient(to_bottom,black_76%,transparent_100%)] dark:rounded-none dark:[mask-image:radial-gradient(ellipse_78%_85%_at_50%_46%,black_62%,transparent_100%)]"
+              className="relative z-10 h-auto w-full max-w-[340px] object-contain object-top transition-transform duration-500 ease-out group-hover:scale-[1.07] [mask-image:linear-gradient(to_bottom,black_82%,transparent_100%)]"
               loading="eager"
               decoding="async"
             />

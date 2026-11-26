@@ -25,7 +25,7 @@ export const profileData: ProfileData = {
     en: 'Mexico',
   },
   favoriteLanguage: 'Java',
-  portraitSrc: '/images/cristian-portrait.jpg',
+  portraitSrc: '/images/cristian-portrait.png',
   githubUrl: 'https://github.com/CrisIslas2000',
   linkedinUrl: 'https://www.linkedin.com/in/cristian-alan-morales-islas-b8281b262',
   email: 'crisislas10@gmail.com',
