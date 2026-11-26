@@ -18,42 +18,70 @@ const ROTATING_SPECIALTIES = [
   'Build. Learn. Evolve.',
 ];
 
-const HERO_FIFA_TRAITS = [
+interface HeroTrait {
+  code: string;
+  label: { es: string; en: string };
+  side: 'left' | 'right';
+  posClass: string;
+  delayClass: string;
+}
+
+const HERO_FIFA_TRAITS: HeroTrait[] = [
   {
     code: 'DBG',
     label: { es: 'Debugging en producción', en: 'Prod Debugging' },
-    posClass: 'sm:-left-10 sm:top-4',
+    side: 'left',
+    posClass: 'sm:-left-20 sm:top-2',
     delayClass: 'delay-[0ms]',
   },
   {
     code: 'ARQ',
     label: { es: 'Arquitectura en capas', en: 'Layered Architecture' },
-    posClass: 'sm:-right-10 sm:top-6',
-    delayClass: 'delay-[60ms]',
+    side: 'right',
+    posClass: 'sm:-right-20 sm:top-4',
+    delayClass: 'delay-[50ms]',
   },
   {
     code: 'JAV',
     label: { es: 'Modo Java + Café', en: 'Java + Coffee Mode' },
-    posClass: 'sm:-left-12 sm:top-1/2 sm:-translate-y-1/2',
-    delayClass: 'delay-[120ms]',
+    side: 'left',
+    posClass: 'sm:-left-24 sm:top-[28%]',
+    delayClass: 'delay-[100ms]',
   },
   {
     code: 'API',
     label: { es: 'Pases filtrados (REST)', en: 'Through-Ball APIs' },
-    posClass: 'sm:-right-12 sm:top-1/2 sm:-translate-y-1/2',
-    delayClass: 'delay-[180ms]',
+    side: 'right',
+    posClass: 'sm:-right-24 sm:top-[30%]',
+    delayClass: 'delay-[150ms]',
+  },
+  {
+    code: 'SQL',
+    label: { es: 'Sin miedo al JOIN', en: 'Fearless SQL JOINs' },
+    side: 'left',
+    posClass: 'sm:-left-24 sm:top-[56%]',
+    delayClass: 'delay-[200ms]',
+  },
+  {
+    code: 'SEC',
+    label: { es: '2FA y código seguro', en: '2FA & Secure Code' },
+    side: 'right',
+    posClass: 'sm:-right-24 sm:top-[58%]',
+    delayClass: 'delay-[250ms]',
   },
   {
     code: 'GIT',
     label: { es: 'Deploy en viernes sin miedo', en: 'Fearless Friday Deploy' },
-    posClass: 'sm:-left-8 sm:bottom-6',
-    delayClass: 'delay-[240ms]',
+    side: 'left',
+    posClass: 'sm:-left-16 sm:bottom-3',
+    delayClass: 'delay-[300ms]',
   },
   {
     code: 'RES',
     label: { es: 'Aguante en el ring', en: 'Ring Resilience' },
-    posClass: 'sm:-right-8 sm:bottom-6',
-    delayClass: 'delay-[300ms]',
+    side: 'right',
+    posClass: 'sm:-right-16 sm:bottom-3',
+    delayClass: 'delay-[350ms]',
   },
 ];
 
@@ -104,7 +132,7 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
       className="relative overflow-hidden border-b border-slate-200/80 py-14 sm:py-20 dark:border-slate-800/80"
     >
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
-        {/* Left: Editorial Intro (dims smoothly when photo spotlight is active) */}
+        {/* Left: Editorial Intro */}
         <div
           className={`order-2 transition-all duration-500 lg:order-1 lg:col-span-7 ${
             photoFocused ? 'opacity-40 blur-[1.5px]' : 'opacity-100 blur-0'
@@ -205,7 +233,7 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
           </div>
         </div>
 
-        {/* Right: Portrait Spotlight + Floating FIFA-Style Dev Badges (No Numbers) */}
+        {/* Right: Portrait Spotlight + 8 Callout Badges (Circle -> Line -> Label) */}
         <div className="order-1 flex flex-col items-center lg:order-2 lg:col-span-5">
           <div
             onMouseEnter={() => setPhotoFocused(true)}
@@ -227,7 +255,6 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             }}
             className="relative flex w-full max-w-sm cursor-pointer items-center justify-center focus:outline-none"
           >
-            {/* Radial Blue Glow */}
             <div
               aria-hidden="true"
               className={`pointer-events-none absolute h-72 w-72 rounded-full blur-3xl transition-all duration-500 ${
@@ -247,26 +274,36 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
               decoding="async"
             />
 
-            {/* Floating FIFA-Style Dev Badges (Desktop sm+) */}
-            {HERO_FIFA_TRAITS.map((trait) => (
-              <div
-                key={trait.code}
-                aria-hidden={!photoFocused}
-                className={`pointer-events-none absolute z-20 hidden items-center gap-2 rounded-xl border border-[#2563EB]/60 bg-[#080F1E]/95 px-3 py-1.5 shadow-lg shadow-[#2563EB]/25 backdrop-blur-xs transition-all duration-300 sm:flex ${trait.posClass} ${trait.delayClass} ${
-                  photoFocused ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
-                }`}
-              >
-                <span className="rounded bg-[#2563EB] px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
-                  {trait.code}
-                </span>
-                <span className="whitespace-nowrap font-mono text-[11px] font-medium text-[#F1F5F9]">
-                  {trait.label[language]}
-                </span>
-              </div>
-            ))}
+            {/* 8 Callout Badges (Circle Node -> Connector Line -> Card) */}
+            {HERO_FIFA_TRAITS.map((trait) => {
+              const isLeft = trait.side === 'left';
+              return (
+                <div
+                  key={trait.code}
+                  aria-hidden={!photoFocused}
+                  className={`pointer-events-none absolute z-20 hidden items-center transition-all duration-300 sm:flex ${trait.posClass} ${trait.delayClass} ${
+                    isLeft ? 'flex-row-reverse' : 'flex-row'
+                  } ${photoFocused ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`}
+                >
+                  {/* Circle Anchor Node */}
+                  <span className="h-2.5 w-2.5 shrink-0 rounded-full border-2 border-[#63B3FA] bg-[#2563EB] shadow-[0_0_8px_rgba(99,179,250,0.9)]" />
+                  {/* Connector Line */}
+                  <span className="h-[1.5px] w-7 shrink-0 bg-gradient-to-r from-[#63B3FA] to-[#2563EB]" />
+                  {/* Label Card */}
+                  <div className="flex items-center gap-2 rounded-xl border border-[#2563EB]/60 bg-[#080F1E]/95 px-2.5 py-1.5 shadow-lg shadow-[#2563EB]/25 backdrop-blur-xs">
+                    <span className="rounded bg-[#2563EB] px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
+                      {trait.code}
+                    </span>
+                    <span className="whitespace-nowrap font-mono text-[11px] font-medium text-[#F1F5F9]">
+                      {trait.label[language]}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
-          {/* Mobile Grid of FIFA-Style Dev Badges when Tapped */}
+          {/* Mobile Grid when Tapped */}
           {photoFocused && (
             <div className="animate-roulette-slide mt-4 grid w-full max-w-sm grid-cols-2 gap-2 sm:hidden">
               {HERO_FIFA_TRAITS.map((trait) => (
@@ -274,6 +311,7 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
                   key={trait.code}
                   className="flex items-center gap-2 rounded-lg border border-[#2563EB]/50 bg-[#080F1E]/95 px-2.5 py-1.5"
                 >
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#63B3FA]" />
                   <span className="rounded bg-[#2563EB] px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
                     {trait.code}
                   </span>
