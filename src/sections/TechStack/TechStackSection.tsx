@@ -387,7 +387,7 @@ export function TechStackSection({
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         DEF (4)
                       </span>
-                      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-1">
+                      <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-1 sm:gap-2.5">
                         {defenders.map(renderPitchPlayer)}
                       </div>
                     </div>
