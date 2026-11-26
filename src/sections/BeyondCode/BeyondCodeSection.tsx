@@ -118,108 +118,114 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
           })}
         </div>
 
-        {/* Dynamic Spotlight Panel (opens on card hover/click) */}
+        {/* Dynamic Spotlight Panel (adapts cleanly to Light & Dark theme) */}
         {activeCard && (
-          <div className="mt-6 overflow-hidden rounded-2xl border border-[#2563EB]/40 bg-[#080F1E] p-6 text-[#F1F5F9] shadow-xl shadow-[#2563EB]/10 transition-all duration-300">
-          {activeCard === 'developer' && (
-            <div className="animate-roulette-slide grid items-center gap-6 md:grid-cols-12">
-              <div className="md:col-span-7">
-                <p className="font-mono text-[11px] uppercase tracking-widest text-[#63B3FA]">
-                  CLEAN CODE · ARCHITECTURE · JAVA
-                </p>
-                <blockquote className="mt-2 font-display text-lg font-semibold leading-snug text-[#F1F5F9]">
-                  &ldquo;Cualquiera puede escribir código que una computadora entienda; los buenos
-                  programadores escriben código que los humanos entienden.&rdquo;
-                </blockquote>
-                <p className="mt-2 font-mono text-xs text-[#94A3B8]">— Martin Fowler</p>
-              </div>
-              {/* Animated Layered Architecture Flow (Clean Code Visual) */}
-              <div className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-[#0D172B] p-4 md:col-span-5">
-                <span className="font-mono text-[10px] uppercase tracking-wider text-[#94A3B8]">
-                  Arquitectura por Capas
-                </span>
-                <div className="flex w-full items-center justify-between gap-1.5 font-mono text-[11px]">
-                  <span className="animate-pulse rounded-md border border-[#2563EB]/60 bg-[#14243D] px-2.5 py-1.5 text-[#63B3FA]">
-                    Controller
+          <div className="mt-6 overflow-hidden rounded-2xl border border-[#2563EB]/40 bg-white p-6 text-slate-900 shadow-xl shadow-[#2563EB]/10 transition-all duration-300 dark:bg-[#080F1E] dark:text-[#F1F5F9]">
+            {activeCard === 'developer' && (
+              <div className="animate-roulette-slide grid items-center gap-6 md:grid-cols-12">
+                <div className="md:col-span-7">
+                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2563EB] dark:text-[#63B3FA]">
+                    CLEAN CODE · ARCHITECTURE · JAVA
+                  </p>
+                  <blockquote className="mt-2 font-display text-lg font-semibold leading-snug text-slate-900 dark:text-[#F1F5F9]">
+                    &ldquo;Cualquiera puede escribir código que una computadora entienda; los buenos
+                    programadores escriben código que los humanos entienden.&rdquo;
+                  </blockquote>
+                  <p className="mt-2 font-mono text-xs text-slate-600 dark:text-[#94A3B8]">
+                    — Martin Fowler
+                  </p>
+                </div>
+                {/* Animated Layered Architecture Flow */}
+                <div className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-4 md:col-span-5 dark:border-slate-800 dark:bg-[#0D172B]">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-[#94A3B8]">
+                    Arquitectura por Capas
                   </span>
-                  <span className="text-[#2563EB]">→</span>
-                  <span className="rounded-md border border-[#63B3FA]/60 bg-[#14243D] px-2.5 py-1.5 text-[#F1F5F9]">
-                    Service
-                  </span>
-                  <span className="text-[#2563EB]">→</span>
-                  <span className="rounded-md border border-[#A50044]/60 bg-[#14243D] px-2.5 py-1.5 text-[#F1F5F9]">
-                    Repository
+                  <div className="flex w-full items-center justify-between gap-1.5 font-mono text-[11px]">
+                    <span className="animate-pulse rounded-md border border-[#2563EB]/50 bg-[#2563EB]/10 px-2.5 py-1.5 font-semibold text-[#1D4ED8] dark:border-[#2563EB]/60 dark:bg-[#14243D] dark:text-[#63B3FA]">
+                      Controller
+                    </span>
+                    <span className="text-[#2563EB]">→</span>
+                    <span className="rounded-md border border-[#63B3FA]/60 bg-white px-2.5 py-1.5 font-semibold text-slate-800 dark:bg-[#14243D] dark:text-[#F1F5F9]">
+                      Service
+                    </span>
+                    <span className="text-[#2563EB]">→</span>
+                    <span className="rounded-md border border-[#A50044]/50 bg-white px-2.5 py-1.5 font-semibold text-slate-800 dark:border-[#A50044]/60 dark:bg-[#14243D] dark:text-[#F1F5F9]">
+                      Repository
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-[#2563EB] dark:text-[#63B3FA]">
+                    SOLID · Validación · Mantenibilidad
                   </span>
                 </div>
-                <span className="font-mono text-[10px] text-[#63B3FA]">
-                  SOLID · Validación · Mantenibilidad
-                </span>
               </div>
-            </div>
-          )}
+            )}
 
-          {activeCard === 'strategist' && (
-            <div className="animate-roulette-slide grid items-center gap-6 md:grid-cols-12">
-              <div className="md:col-span-8">
-                <p className="font-mono text-[11px] uppercase tracking-widest text-[#63B3FA]">
-                  VISIÓN TÁCTICA · INSPIRACIÓN #10
-                </p>
-                <p className="mt-2 font-display text-lg font-semibold leading-snug text-[#F1F5F9]">
-                  Leer la cancha antes de recibir el balón: así como un pase filtrado rompe líneas,
-                  una buena arquitectura resuelve el problema antes de escribir la primera línea de
-                  código.
-                </p>
-                <p className="mt-2 font-mono text-xs text-[#94A3B8]">
-                  Precisión · Creatividad · Trabajo en equipo
-                </p>
-              </div>
-              <div className="flex items-center justify-center md:col-span-4">
-                <div className="flex h-24 w-24 flex-col items-center justify-center rounded-2xl border-2 border-[#A50044] bg-gradient-to-b from-[#14243D] to-[#080F1E] shadow-lg">
-                  <span className="font-display text-3xl font-bold text-[#F1F5F9]">10</span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#63B3FA]">
-                    Estratega
-                  </span>
+            {activeCard === 'strategist' && (
+              <div className="animate-roulette-slide grid items-center gap-6 md:grid-cols-12">
+                <div className="md:col-span-8">
+                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2563EB] dark:text-[#63B3FA]">
+                    VISIÓN TÁCTICA · INSPIRACIÓN #10
+                  </p>
+                  <p className="mt-2 font-display text-lg font-semibold leading-snug text-slate-900 dark:text-[#F1F5F9]">
+                    Leer la cancha antes de recibir el balón: así como un pase filtrado rompe
+                    líneas, una buena arquitectura resuelve el problema antes de escribir la primera
+                    línea de código.
+                  </p>
+                  <p className="mt-2 font-mono text-xs text-slate-600 dark:text-[#94A3B8]">
+                    Precisión · Creatividad · Trabajo en equipo
+                  </p>
+                </div>
+                <div className="flex items-center justify-center md:col-span-4">
+                  <div className="flex h-24 w-24 flex-col items-center justify-center rounded-2xl border-2 border-[#A50044] bg-gradient-to-b from-slate-100 to-white shadow-lg dark:from-[#14243D] dark:to-[#080F1E]">
+                    <span className="font-display text-3xl font-bold text-slate-900 dark:text-[#F1F5F9]">
+                      10
+                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-[#2563EB] dark:text-[#63B3FA]">
+                      Estratega
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {activeCard === 'wrestler' && (
-            <div className="animate-roulette-slide relative overflow-hidden rounded-xl border border-[#2563EB]/40 bg-[#050A14] p-5">
-              {/* Enhanced Mini Blue Lucha Ring */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-3 flex flex-col gap-2"
-              >
-                <span className="h-[1.5px] w-full bg-[#2563EB]/70" />
-                <span className="h-[1.5px] w-full bg-[#F1F5F9]/50" />
-                <span className="h-[1.5px] w-full bg-[#A50044]/75" />
-              </div>
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute bottom-0 left-0 top-0 w-2 bg-gradient-to-b from-[#2563EB] to-[#14243D]"
-              />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute bottom-0 right-0 top-0 w-2 bg-gradient-to-b from-[#C8102E] to-[#14243D]"
-              />
+            {activeCard === 'wrestler' && (
+              <div className="animate-roulette-slide relative overflow-hidden rounded-xl border border-[#2563EB]/30 bg-slate-50 p-5 dark:border-[#2563EB]/40 dark:bg-[#050A14]">
+                {/* Mini Blue Lucha Ring */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 top-3 flex flex-col gap-2"
+                >
+                  <span className="h-[1.5px] w-full bg-[#2563EB]/60 dark:bg-[#2563EB]/70" />
+                  <span className="h-[1.5px] w-full bg-slate-300 dark:bg-[#F1F5F9]/50" />
+                  <span className="h-[1.5px] w-full bg-[#A50044]/70 dark:bg-[#A50044]/75" />
+                </div>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-0 left-0 top-0 w-2 bg-gradient-to-b from-[#2563EB] to-[#14243D]"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-0 right-0 top-0 w-2 bg-gradient-to-b from-[#C8102E] to-[#14243D]"
+                />
 
-              <div className="relative z-10 flex flex-col items-center gap-5 pt-3 sm:flex-row">
-                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-[#2563EB]/50 bg-[#14243D]/90 shadow-lg shadow-[#2563EB]/20">
-                  <LuchaMascot className="h-18 w-18 animate-bounce" />
-                </div>
-                <div>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#63B3FA]">
-                    RINCÓN AZUL · INSPIRACIÓN KEMONITO &amp; LUCHA LIBRE
-                  </span>
-                  <h4 className="mt-1 font-display text-lg font-bold text-[#F1F5F9]">
-                    {t.easterEggTitle}
-                  </h4>
-                  <p className="mt-1 text-sm text-[#94A3B8]">{t.easterEggText}</p>
+                <div className="relative z-10 flex flex-col items-center gap-5 pt-3 sm:flex-row">
+                  <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-[#2563EB]/40 bg-white shadow-lg shadow-[#2563EB]/15 dark:border-[#2563EB]/50 dark:bg-[#14243D]/90">
+                    <LuchaMascot className="h-18 w-18 animate-bounce" />
+                  </div>
+                  <div>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-[#2563EB] dark:text-[#63B3FA]">
+                      RINCÓN AZUL · INSPIRACIÓN KEMONITO &amp; LUCHA LIBRE
+                    </span>
+                    <h4 className="mt-1 font-display text-lg font-bold text-slate-900 dark:text-[#F1F5F9]">
+                      {t.easterEggTitle}
+                    </h4>
+                    <p className="mt-1 text-sm text-slate-600 dark:text-[#94A3B8]">
+                      {t.easterEggText}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
         )}
       </div>
