@@ -1,5 +1,16 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink, FolderGit2, Github, LayoutGrid, Orbit } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  FolderGit2,
+  Github,
+  LayoutGrid,
+  Orbit,
+  Pause,
+  Play,
+  X,
+} from 'lucide-react';
 import type { Translations } from '@/i18n/translations';
 import type { Language, ProjectCategory, ProjectItem } from '@/types/portfolio';
 
@@ -25,8 +36,10 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
   const [selectedCategory, setSelectedCategory] = useState<'ALL' | ProjectCategory>('ALL');
   const [layoutMode, setLayoutMode] = useState<'roulette' | 'grid'>('roulette');
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isHoverPaused, setIsHoverPaused] = useState(false);
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
+  const [modalIndex, setModalIndex] = useState<number | null>(null);
 
   const publishedItems = items.filter((item) => item.published);
   const availableCategories = CATEGORIES.filter((cat) =>
@@ -39,6 +52,8 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
 
   const safeIndex =
     filteredItems.length > 0 ? Math.min(activeIndex, filteredItems.length - 1) : 0;
+
+  const isPaused = isHoverPaused || isManuallyPaused || modalIndex !== null;
 
   useEffect(() => {
     if (layoutMode !== 'roulette' || filteredItems.length <= 1 || isPaused) return;
@@ -61,6 +76,25 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
     return () => window.clearInterval(timer);
   }, [layoutMode, filteredItems.length, isPaused]);
 
+  useEffect(() => {
+    if (modalIndex === null) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setModalIndex(null);
+      if (e.key === 'ArrowLeft') {
+        setModalIndex((prev) =>
+          prev === null ? null : (prev - 1 + filteredItems.length) % filteredItems.length
+        );
+      }
+      if (e.key === 'ArrowRight') {
+        setModalIndex((prev) =>
+          prev === null ? null : (prev + 1) % filteredItems.length
+        );
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [modalIndex, filteredItems.length]);
+
   const remainingPercent = Math.max(0, 100 - (elapsedMs / ROULETTE_DURATION_MS) * 100);
   const remainingSeconds = Math.max(1, Math.ceil((ROULETTE_DURATION_MS - elapsedMs) / 1000));
 
@@ -68,6 +102,7 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
     setSelectedCategory(category);
     setActiveIndex(0);
     setElapsedMs(0);
+    setModalIndex(null);
   };
 
   const handlePrev = () => {
@@ -82,16 +117,25 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
     setElapsedMs(0);
   };
 
-  const renderProjectCard = (project: ProjectItem, index: number, isFeatured = false) => (
+  const renderBriefCard = (project: ProjectItem, index: number, isFeatured = false) => (
     <article
-      key={project.id}
-      className={`card-interactive relative flex flex-col justify-between overflow-hidden rounded-xl border bg-white p-6 transition-all duration-300 hover:scale-[1.03] dark:bg-[#14243D]/85 ${
+      key={`${project.id}-${index}`}
+      onClick={() => setModalIndex(index)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setModalIndex(index);
+        }
+      }}
+      className={`card-interactive animate-roulette-slide group relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl border bg-white p-6 transition-all duration-300 hover:scale-[1.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] dark:bg-[#14243D]/85 ${
         isFeatured
           ? 'border-[#2563EB]/60 shadow-xl shadow-[#2563EB]/15 dark:border-[#63B3FA]/60'
           : 'border-slate-200 hover:border-[#2563EB] dark:border-slate-800 dark:hover:border-[#63B3FA]'
       }`}
     >
-      {/* Top Bar: Countdown Progress in Roulette Mode, Static Accent in Grid Mode */}
+      {/* Top Countdown Bar */}
       {isFeatured && layoutMode === 'roulette' && filteredItems.length > 1 ? (
         <div
           aria-hidden="true"
@@ -129,41 +173,15 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
           )}
         </div>
 
-        <p className="mt-2.5 text-sm leading-relaxed text-slate-600 dark:text-[#94A3B8]">
+        {/* Brief Summary */}
+        <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-[#94A3B8]">
           {project.description[language]}
         </p>
-
-        <dl className="mt-4 space-y-2 border-t border-slate-200 pt-3 text-xs dark:border-slate-800">
-          <div>
-            <dt className="inline font-mono font-semibold text-slate-700 dark:text-[#F1F5F9]">
-              {t.problemLabel}:{' '}
-            </dt>
-            <dd className="inline text-slate-600 dark:text-[#94A3B8]">
-              {project.problemSolved[language]}
-            </dd>
-          </div>
-          <div>
-            <dt className="inline font-mono font-semibold text-slate-700 dark:text-[#F1F5F9]">
-              {t.solutionLabel}:{' '}
-            </dt>
-            <dd className="inline text-slate-600 dark:text-[#94A3B8]">
-              {project.solutionImplemented[language]}
-            </dd>
-          </div>
-          <div>
-            <dt className="inline font-mono font-semibold text-slate-700 dark:text-[#F1F5F9]">
-              {t.responsibilityLabel}:{' '}
-            </dt>
-            <dd className="inline text-slate-600 dark:text-[#94A3B8]">
-              {project.responsibility[language]}
-            </dd>
-          </div>
-        </dl>
       </div>
 
       <div className="mt-5">
         <div className="flex flex-wrap gap-1.5">
-          {project.stack.map((tech) => (
+          {project.stack.slice(0, 5).map((tech) => (
             <span
               key={tech}
               className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-[11px] text-slate-700 dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]"
@@ -174,33 +192,21 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
         </div>
 
         <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-3 dark:border-slate-800">
-          <div className="flex items-center gap-3">
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-[#2563EB] hover:underline dark:text-[#63B3FA]"
-              >
-                <Github className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>{t.codeButton}</span>
-              </a>
-            )}
-            {project.demoUrl && (
-              <a
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-slate-700 hover:underline dark:text-[#F1F5F9]"
-              >
-                <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>{t.demoButton}</span>
-              </a>
-            )}
-          </div>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setModalIndex(index);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#2563EB]/10 px-3 py-1 font-mono text-xs font-semibold text-[#2563EB] transition-colors hover:bg-[#2563EB] hover:text-white dark:text-[#63B3FA] dark:hover:bg-[#2563EB] dark:hover:text-white"
+          >
+            <span>{language === 'es' ? 'Ver más' : 'View more'}</span>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </button>
+
           <span className="font-mono text-[10px] text-slate-500 dark:text-[#94A3B8]">
             {isFeatured && layoutMode === 'roulette' && filteredItems.length > 1
-              ? `${project.status[language]} · ${remainingSeconds}s`
+              ? `${project.status[language]} · ${isManuallyPaused ? '❚❚' : `${remainingSeconds}s`}`
               : project.status[language]}
           </span>
         </div>
@@ -208,13 +214,14 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
     </article>
   );
 
+  const modalProject = modalIndex !== null ? filteredItems[modalIndex] : null;
+
   return (
     <section
       id="proyectos"
       className="border-b border-slate-200/80 py-20 sm:py-28 dark:border-slate-800/80"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* Header Row: Title Left + Mode & Filter Pills Right */}
         <div className="mb-10 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
           <div>
             <p className="font-mono text-xs font-medium uppercase tracking-widest text-[#2563EB] dark:text-[#63B3FA]">
@@ -315,12 +322,11 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
           </div>
         ) : layoutMode === 'roulette' ? (
           <div
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
+            onMouseEnter={() => setIsHoverPaused(true)}
+            onMouseLeave={() => setIsHoverPaused(false)}
           >
-            {/* Roulette Carousel Stage (auto-rotates every 8s, pauses on hover) */}
+            {/* Roulette Carousel Stage */}
             <div className="grid items-center gap-6 lg:grid-cols-12">
-              {/* Prev Card Preview (Desktop) */}
               {filteredItems.length > 1 && (
                 <button
                   type="button"
@@ -349,16 +355,14 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
                 </button>
               )}
 
-              {/* Active Center Featured Card */}
               <div
                 className={
                   filteredItems.length > 1 ? 'lg:col-span-6' : 'mx-auto w-full max-w-2xl lg:col-span-12'
                 }
               >
-                {renderProjectCard(filteredItems[safeIndex]!, safeIndex, true)}
+                {renderBriefCard(filteredItems[safeIndex]!, safeIndex, true)}
               </div>
 
-              {/* Next Card Preview (Desktop) */}
               {filteredItems.length > 1 && (
                 <button
                   type="button"
@@ -382,9 +386,9 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
               )}
             </div>
 
-            {/* Roulette Controls & Dots */}
+            {/* Roulette Controls + Pause Button */}
             {filteredItems.length > 1 && (
-              <div className="mt-6 flex items-center justify-center gap-4">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
                 <button
                   type="button"
                   onClick={handlePrev}
@@ -399,7 +403,10 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
                     <button
                       key={proj.id}
                       type="button"
-                      onClick={() => setActiveIndex(idx)}
+                      onClick={() => {
+                        setActiveIndex(idx);
+                        setElapsedMs(0);
+                      }}
                       aria-label={`${idx + 1}: ${proj.name[language]}`}
                       className={`h-2 rounded-full transition-all duration-300 ${
                         idx === safeIndex
@@ -418,15 +425,175 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
                 >
                   <ChevronRight className="h-4 w-4" aria-hidden="true" />
                 </button>
+
+                {/* Manual Pause / Resume Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsManuallyPaused((p) => !p)}
+                  aria-pressed={isManuallyPaused}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-xs text-slate-700 transition-colors hover:border-[#2563EB] hover:text-[#2563EB] dark:border-slate-700 dark:bg-[#14243D] dark:text-[#F1F5F9]"
+                >
+                  {isManuallyPaused ? (
+                    <>
+                      <Play className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span>{language === 'es' ? 'Reanudar' : 'Resume'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Pause className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span>{language === 'es' ? 'Pausar' : 'Pause'}</span>
+                    </>
+                  )}
+                </button>
               </div>
             )}
           </div>
         ) : (
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {filteredItems.map((project, index) => renderProjectCard(project, index))}
+            {filteredItems.map((project, index) => renderBriefCard(project, index))}
           </div>
         )}
       </div>
+
+      {/* Project Detail Modal with Side Navigation */}
+      {modalProject && modalIndex !== null && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={modalProject.name[language]}
+          onClick={() => setModalIndex(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="animate-roulette-slide relative flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-[#2563EB]/50 bg-white p-6 shadow-2xl sm:p-8 dark:bg-[#0D172B]"
+          >
+            <div
+              aria-hidden="true"
+              className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-[#2563EB] via-[#A50044] to-[#C8102E]"
+            />
+
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-mono text-xs uppercase tracking-wider text-[#2563EB] dark:text-[#63B3FA]">
+                  {String(modalIndex + 1).padStart(2, '0')} // {modalProject.categories.join(' · ')}
+                </p>
+                <h3 className="mt-1 font-display text-2xl font-bold text-slate-900 dark:text-[#F1F5F9]">
+                  {modalProject.name[language]}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalIndex(null)}
+                aria-label={language === 'es' ? 'Cerrar modal' : 'Close modal'}
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:border-[#2563EB] hover:text-[#2563EB] dark:border-slate-700 dark:text-[#94A3B8] dark:hover:text-[#F1F5F9]"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-[#94A3B8]">
+              {modalProject.description[language]}
+            </p>
+
+            <dl className="mt-5 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm dark:border-slate-800 dark:bg-[#080F1E]">
+              <div>
+                <dt className="font-mono text-xs font-semibold uppercase text-[#2563EB] dark:text-[#63B3FA]">
+                  {t.problemLabel}
+                </dt>
+                <dd className="mt-1 text-slate-700 dark:text-[#94A3B8]">
+                  {modalProject.problemSolved[language]}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-mono text-xs font-semibold uppercase text-[#2563EB] dark:text-[#63B3FA]">
+                  {t.solutionLabel}
+                </dt>
+                <dd className="mt-1 text-slate-700 dark:text-[#94A3B8]">
+                  {modalProject.solutionImplemented[language]}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-mono text-xs font-semibold uppercase text-[#2563EB] dark:text-[#63B3FA]">
+                  {t.responsibilityLabel}
+                </dt>
+                <dd className="mt-1 text-slate-700 dark:text-[#94A3B8]">
+                  {modalProject.responsibility[language]}
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              {modalProject.stack.map((tech) => (
+                <span
+                  key={tech}
+                  className="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 font-mono text-xs text-slate-700 dark:border-slate-700 dark:bg-[#14243D] dark:text-[#F1F5F9]"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            {/* Modal Footer: Links + Side Navigation Arrows */}
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 pt-4 dark:border-slate-800">
+              <div className="flex items-center gap-3">
+                {modalProject.githubUrl && (
+                  <a
+                    href={modalProject.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#2563EB] px-3.5 py-1.5 font-mono text-xs font-semibold text-white hover:bg-[#1D4ED8]"
+                  >
+                    <Github className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>{t.codeButton}</span>
+                  </a>
+                )}
+                {modalProject.demoUrl && (
+                  <a
+                    href={modalProject.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-3.5 py-1.5 font-mono text-xs font-semibold text-slate-700 dark:border-slate-700 dark:text-[#F1F5F9]"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>{t.demoButton}</span>
+                  </a>
+                )}
+                <span className="font-mono text-xs text-slate-500 dark:text-[#94A3B8]">
+                  {modalProject.status[language]}
+                </span>
+              </div>
+
+              {filteredItems.length > 1 && (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setModalIndex(
+                        (modalIndex - 1 + filteredItems.length) % filteredItems.length
+                      )
+                    }
+                    aria-label={language === 'es' ? 'Proyecto anterior' : 'Previous project'}
+                    className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 font-mono text-xs text-slate-700 hover:border-[#2563EB] hover:text-[#2563EB] dark:border-slate-700 dark:bg-[#14243D] dark:text-[#F1F5F9]"
+                  >
+                    <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+                    <span>{language === 'es' ? 'Anterior' : 'Prev'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModalIndex((modalIndex + 1) % filteredItems.length)}
+                    aria-label={language === 'es' ? 'Siguiente proyecto' : 'Next project'}
+                    className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 font-mono text-xs text-slate-700 hover:border-[#2563EB] hover:text-[#2563EB] dark:border-slate-700 dark:bg-[#14243D] dark:text-[#F1F5F9]"
+                  >
+                    <span>{language === 'es' ? 'Siguiente' : 'Next'}</span>
+                    <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

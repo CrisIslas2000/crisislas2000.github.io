@@ -8,7 +8,7 @@ const BOOT_STEPS = [
 ];
 
 /**
- * Pantalla de carga tecnológica + ring de lucha libre (~1.4s, botón Saltar y respeta prefers-reduced-motion).
+ * Pantalla de carga tecnológica + ring de lucha libre (~3s, botón Saltar y respeta prefers-reduced-motion).
  */
 export function SplashScreen() {
   const [visible, setVisible] = useState(() => {
@@ -21,10 +21,10 @@ export function SplashScreen() {
   useEffect(() => {
     if (!visible) return;
 
-    const step1 = window.setTimeout(() => setStepIndex(1), 350);
-    const step2 = window.setTimeout(() => setStepIndex(2), 750);
-    const fadeTimer = window.setTimeout(() => setFading(true), 1150);
-    const hideTimer = window.setTimeout(() => setVisible(false), 1400);
+    const step1 = window.setTimeout(() => setStepIndex(1), 850);
+    const step2 = window.setTimeout(() => setStepIndex(2), 1750);
+    const fadeTimer = window.setTimeout(() => setFading(true), 2650);
+    const hideTimer = window.setTimeout(() => setVisible(false), 3000);
 
     return () => {
       window.clearTimeout(step1);
@@ -46,12 +46,11 @@ export function SplashScreen() {
       role="dialog"
       aria-modal="true"
       aria-label="Pantalla de bienvenida"
-      className={`no-print bg-grid-pattern fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080F1E] px-4 transition-opacity duration-250 ${
+      className={`no-print bg-grid-pattern fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080F1E] px-4 transition-opacity duration-350 ${
         fading ? 'pointer-events-none opacity-0' : 'opacity-100'
       }`}
     >
       <div className="relative flex w-full max-w-md flex-col items-center gap-4 rounded-2xl border border-[#2563EB]/30 bg-[#080F1E]/95 px-6 py-7 text-center shadow-2xl shadow-[#2563EB]/15">
-        {/* Perspective Lucha Libre Ring with CI. Logo in the Center */}
         <div className="relative flex h-44 w-full items-center justify-center">
           <svg
             viewBox="0 0 320 170"
@@ -112,12 +111,10 @@ export function SplashScreen() {
           CI<span className="text-[#2563EB]">.</span> — Beyond the Code
         </p>
 
-        {/* Fine progress bar */}
         <div className="h-1 w-full overflow-hidden rounded-full bg-[#14243D]">
           <div className="animate-splash-bar h-full rounded-full bg-gradient-to-r from-[#2563EB] via-[#63B3FA] to-[#A50044]" />
         </div>
 
-        {/* Terminal Boot Sequence */}
         <div className="w-full rounded-xl border border-slate-800 bg-[#050A14] px-3.5 py-2.5 text-left font-mono text-[11px] leading-relaxed">
           {BOOT_STEPS.slice(0, stepIndex + 1).map((line, idx) => (
             <p
@@ -129,7 +126,6 @@ export function SplashScreen() {
           ))}
         </div>
 
-        {/* Discreet Skip Button */}
         <div className="flex w-full justify-end">
           <button
             type="button"

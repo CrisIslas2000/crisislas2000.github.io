@@ -31,13 +31,21 @@ export function EducationSection({
         <SectionHeader eyebrow={t.eyebrow} title={t.title} />
 
         <div className="grid gap-8 lg:grid-cols-3">
-          {/* Academic Education */}
-          <div className="card-interactive rounded-2xl border border-slate-200 bg-white p-8 hover:border-[#2563EB]/50 lg:col-span-2 dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]/40">
-            <div className="flex items-center gap-2.5">
-              <GraduationCap className="h-5 w-5 text-[#2563EB] dark:text-[#63B3FA]" aria-hidden="true" />
-              <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
-                {t.title}
-              </h3>
+          {/* Academic Education with playful school-stage hover tilt & badge */}
+          <div className="card-interactive group rounded-2xl border border-slate-200 bg-white p-8 hover:border-[#2563EB]/50 lg:col-span-2 dark:border-slate-800 dark:bg-[#14243D]/70 dark:hover:border-[#63B3FA]/40">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                <GraduationCap
+                  className="h-6 w-6 text-[#2563EB] transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110 dark:text-[#63B3FA]"
+                  aria-hidden="true"
+                />
+                <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-[#F1F5F9]">
+                  {t.title}
+                </h3>
+              </div>
+              <span className="rounded-full border border-[#2563EB]/30 bg-[#2563EB]/10 px-3 py-0.5 font-mono text-[11px] text-[#2563EB] transition-transform duration-300 group-hover:scale-105 dark:text-[#63B3FA]">
+                2015 → 2022 · {language === 'es' ? 'Etapa escolar' : 'Academic journey'}
+              </span>
             </div>
 
             {publishedEdu.length === 0 ? (
@@ -45,11 +53,11 @@ export function EducationSection({
                 {t.pendingNotice}
               </p>
             ) : (
-              <ul className="mt-4 space-y-4">
-                {publishedEdu.map((edu) => (
+              <ul className="mt-5 space-y-4">
+                {publishedEdu.map((edu, idx) => (
                   <li
                     key={edu.id}
-                    className="rounded-xl border border-slate-200 bg-slate-50 p-4 transition-all duration-300 hover:translate-x-1 hover:border-[#2563EB]/50 dark:border-slate-700/80 dark:bg-[#080F1E] dark:hover:border-[#63B3FA]/50"
+                    className="group/edu relative overflow-hidden rounded-xl border border-slate-200 bg-slate-50 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:rotate-[-0.5deg] hover:border-[#2563EB]/60 hover:shadow-md dark:border-slate-700/80 dark:bg-[#080F1E] dark:hover:border-[#63B3FA]/60"
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <p className="font-display text-base font-semibold text-slate-900 dark:text-[#F1F5F9]">
@@ -62,15 +70,25 @@ export function EducationSection({
                     <p className="mt-1 text-sm text-[#2563EB] dark:text-[#63B3FA]">
                       {edu.institution}
                     </p>
-                    <p className="mt-1 font-mono text-xs text-slate-600 dark:text-[#94A3B8]">
-                      {edu.status[language]}
-                    </p>
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="font-mono text-xs text-slate-600 dark:text-[#94A3B8]">
+                        {edu.status[language]}
+                      </span>
+                      <span className="font-mono text-[10px] text-[#63B3FA] opacity-0 transition-opacity duration-300 group-hover/edu:opacity-100">
+                        {idx === 0
+                          ? language === 'es'
+                            ? '🎓 Nivel Superior'
+                            : '🎓 University'
+                          : language === 'es'
+                            ? '💻 Donde empezó el código'
+                            : '💻 Where code began'}
+                      </span>
+                    </div>
                   </li>
                 ))}
               </ul>
             )}
 
-            {/* Certifications (solo se muestra cuando hay registros publicados) */}
             {publishedCerts.length > 0 && (
               <div className="mt-8 border-t border-slate-200 pt-6 dark:border-slate-700/70">
                 <div className="flex items-center gap-2.5">

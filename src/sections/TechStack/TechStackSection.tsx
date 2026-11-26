@@ -22,6 +22,7 @@ export function TechStackSection({
   const [viewMode, setViewMode] = useState<'both' | 'tactical' | 'conventional'>('both');
   const [selectedName, setSelectedName] = useState<string>('Java');
   const [isInspecting, setIsInspecting] = useState(false);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   const goalkeeper = tacticalStarters.filter((p) => p.zone === 'goalkeeper');
   const defenders = tacticalStarters.filter((p) => p.zone === 'defense');
@@ -397,12 +398,26 @@ export function TechStackSection({
               </span>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {categories.map((category) => (
-                <article
-                  key={category.id}
-                  className="card-interactive overflow-hidden rounded-xl border border-slate-200 bg-white hover:border-[#2563EB]/60 dark:border-slate-800 dark:bg-[#0D172B] dark:hover:border-[#63B3FA]/50"
-                >
+            <div
+              onMouseLeave={() => setHoveredCategory(null)}
+              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {categories.map((category) => {
+                const isActive = hoveredCategory === category.id;
+                const isDimmed = hoveredCategory !== null && !isActive;
+
+                return (
+                  <article
+                    key={category.id}
+                    onMouseEnter={() => setHoveredCategory(category.id)}
+                    className={`overflow-hidden rounded-xl border bg-white transition-all duration-300 dark:bg-[#0D172B] ${
+                      isActive
+                        ? 'scale-[1.02] border-[#2563EB] shadow-xl shadow-[#2563EB]/15 dark:border-[#63B3FA]'
+                        : isDimmed
+                          ? 'scale-[0.98] border-slate-200 opacity-45 blur-[1px] dark:border-slate-800'
+                          : 'border-slate-200 dark:border-slate-800'
+                    }`}
+                  >
                   {/* Developer Module Header */}
                   <div className="flex items-center justify-between border-b border-slate-200 bg-slate-100/80 px-4 py-2.5 dark:border-slate-800 dark:bg-[#14243D]">
                     <span className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-slate-800 dark:text-[#63B3FA]">
@@ -443,7 +458,8 @@ export function TechStackSection({
                     </p>
                   </div>
                 </article>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
