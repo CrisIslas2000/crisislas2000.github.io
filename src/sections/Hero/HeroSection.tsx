@@ -87,14 +87,14 @@ const HERO_FIFA_TRAITS: HeroTrait[] = [
     code: 'GIT',
     label: { es: 'Cero miedo al deploy en viernes', en: 'Zero fear of Friday deploys' },
     side: 'left',
-    posClass: 'sm:-left-16 sm:bottom-1',
+    posClass: 'sm:-left-32 sm:bottom-1',
     delayClass: 'delay-[360ms]',
   },
   {
-    code: 'RES',
-    label: { es: 'Aguante en el ring', en: 'Ring Resilience' },
+    code: 'FUT',
+    label: { es: "Juego en equipo al 90'", en: "Teamwork at 90'" },
     side: 'right',
-    posClass: 'sm:-right-16 sm:bottom-1',
+    posClass: 'sm:-right-24 sm:bottom-1',
     delayClass: 'delay-[405ms]',
   },
 ];
@@ -302,7 +302,7 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
                   {/* Circle Anchor Node */}
                   <span className="h-2.5 w-2.5 shrink-0 rounded-full border-2 border-[#63B3FA] bg-[#2563EB] shadow-[0_0_8px_rgba(99,179,250,0.9)]" />
                   {/* Connector Line */}
-                  <span className="h-[1.5px] w-7 shrink-0 bg-gradient-to-r from-[#63B3FA] to-[#2563EB]" />
+                  <span className="h-[1.5px] w-6 shrink-0 bg-gradient-to-r from-[#63B3FA] to-[#2563EB]" />
                   {/* Label Card */}
                   <div className="flex items-center gap-2 rounded-xl border border-[#2563EB]/60 bg-[#080F1E]/95 px-2.5 py-1.5 shadow-lg shadow-[#2563EB]/25 backdrop-blur-xs">
                     <span className="rounded bg-[#2563EB] px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
