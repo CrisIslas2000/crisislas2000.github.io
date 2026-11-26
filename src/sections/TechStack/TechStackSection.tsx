@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { LayoutGrid, Shield, Star, Terminal } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { LayoutGrid, Pause, Play, Shield, Star, Terminal } from 'lucide-react';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { TechLogo } from '@/components/shared/TechLogo';
 import { tacticalBench, tacticalStarters } from '@/data/techStack';
@@ -22,7 +22,26 @@ export function TechStackSection({
   const [viewMode, setViewMode] = useState<'both' | 'tactical' | 'conventional'>('both');
   const [selectedName, setSelectedName] = useState<string>('Java');
   const [isInspecting, setIsInspecting] = useState(false);
+  const [isPitchPaused, setIsPitchPaused] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (viewMode === 'conventional' || isInspecting || isPitchPaused) return;
+    const reduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    const timer = window.setInterval(() => {
+      setSelectedName((prev) => {
+        const currentIdx = tacticalStarters.findIndex((p) => p.name === prev);
+        const nextIdx = currentIdx === -1 ? 0 : (currentIdx + 1) % tacticalStarters.length;
+        return tacticalStarters[nextIdx]?.name ?? 'Java';
+      });
+    }, 4000);
+
+    return () => window.clearInterval(timer);
+  }, [viewMode, isInspecting, isPitchPaused]);
 
   const goalkeeper = tacticalStarters.filter((p) => p.zone === 'goalkeeper');
   const defenders = tacticalStarters.filter((p) => p.zone === 'defense');
@@ -54,7 +73,7 @@ export function TechStackSection({
           isSelected
             ? 'scale-105 border-[#63B3FA] bg-[#2563EB]/30 ring-2 ring-[#63B3FA]/60'
             : isDimmed
-              ? 'border-[#2563EB]/25 bg-[#080F1E]/75 opacity-45 blur-[0.8px]'
+              ? 'border-[#2563EB]/30 bg-[#080F1E]/80 opacity-70'
               : 'border-[#2563EB]/40 bg-[#080F1E]/85 hover:border-[#63B3FA]/80 hover:bg-[#14243D]'
         }`}
       >
@@ -141,9 +160,29 @@ export function TechStackSection({
                   {t.tacticalSubtitle}
                 </p>
               </div>
-              <span className="rounded-md border border-[#2563EB]/30 bg-[#2563EB]/10 px-3 py-1 font-mono text-xs font-semibold text-[#2563EB] dark:text-[#63B3FA]">
-                {t.startersLabel}
-              </span>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="rounded-md border border-[#2563EB]/30 bg-[#2563EB]/10 px-3 py-1 font-mono text-xs font-semibold text-[#2563EB] dark:text-[#63B3FA]">
+                  {t.startersLabel}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsPitchPaused((p) => !p)}
+                  aria-pressed={isPitchPaused}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-2.5 py-1 font-mono text-xs text-slate-700 transition-colors hover:border-[#2563EB] hover:text-[#2563EB] dark:border-slate-700 dark:bg-[#14243D] dark:text-[#F1F5F9]"
+                >
+                  {isPitchPaused ? (
+                    <>
+                      <Play className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span>{language === 'es' ? 'Reanudar (4s)' : 'Resume (4s)'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Pause className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span>{language === 'es' ? 'Pausar (4s)' : 'Pause (4s)'}</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             <div
@@ -308,7 +347,7 @@ export function TechStackSection({
                             isSelected
                               ? 'scale-105 border border-[#2563EB] bg-[#2563EB] text-white shadow-sm'
                               : isDimmed
-                                ? 'border border-slate-200 bg-slate-50 text-slate-700 opacity-45 blur-[0.8px] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
+                                ? 'border border-slate-200 bg-slate-50 text-slate-700 opacity-70 dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
                                 : tech.usage === 'exploring'
                                   ? 'border border-dashed border-[#63B3FA]/60 bg-[#63B3FA]/10 text-slate-700 hover:border-[#2563EB] dark:text-[#63B3FA]'
                                   : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#2563EB] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
