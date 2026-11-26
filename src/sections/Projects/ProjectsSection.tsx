@@ -173,9 +173,15 @@ export function ProjectsSection({ items, githubUrl, language, t }: ProjectsSecti
           )}
         </div>
 
-        {/* Brief Summary */}
+        {/* Richer Description + Implemented Solution */}
         <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-[#94A3B8]">
           {project.description[language]}
+        </p>
+        <p className="mt-2.5 border-l-2 border-[#2563EB]/50 pl-3 text-xs leading-relaxed text-slate-600 dark:text-[#94A3B8]">
+          <span className="font-mono font-semibold text-slate-800 dark:text-[#F1F5F9]">
+            {t.solutionLabel}:{' '}
+          </span>
+          {project.solutionImplemented[language]}
         </p>
       </div>
 
