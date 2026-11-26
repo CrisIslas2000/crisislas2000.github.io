@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Footer } from '@/components/layout/Footer';
 import { Navbar } from '@/components/layout/Navbar';
 import { AtsCvPrintView } from '@/components/shared/AtsCvPrintView';
+import { CvDownloadModal } from '@/components/shared/CvDownloadModal';
 import { SplashScreen } from '@/components/shared/SplashScreen';
 import { certificationItems, educationItems, languageSkills } from '@/data/education';
 import { experienceItems } from '@/data/experience';
@@ -22,15 +24,11 @@ import { TechStackSection } from '@/sections/TechStack/TechStackSection';
 export function App() {
   const { language, toggleLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
+  const [cvModalOpen, setCvModalOpen] = useState(false);
   const t = translations[language];
 
   const handleDownloadCv = () => {
-    const link = document.createElement('a');
-    link.href = '/documents/CV_Cristian_Islas.pdf';
-    link.download = 'CV_Cristian_Islas.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    setCvModalOpen(true);
   };
 
   return (
@@ -92,6 +90,12 @@ export function App() {
       </main>
 
       <Footer t={t.footer} />
+
+      <CvDownloadModal
+        isOpen={cvModalOpen}
+        language={language}
+        onClose={() => setCvModalOpen(false)}
+      />
 
       {/* Dedicated ATS-Friendly Single-Column Printable PDF CV */}
       <AtsCvPrintView
