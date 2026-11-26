@@ -116,7 +116,13 @@ const cardLeftBorders = [
 ];
 
 export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
-  const [activeCard, setActiveCard] = useState<string | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [pinnedCard, setPinnedCard] = useState<string | null>(null);
+  const activeCard = hoveredCard ?? pinnedCard;
+
+  const handleCardClick = (id: string) => {
+    setPinnedCard((prev) => (prev === id ? null : id));
+  };
 
   return (
     <section
@@ -124,7 +130,7 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
       className="relative border-b border-slate-200/80 py-16 sm:py-24 dark:border-slate-800/80"
     >
       <div
-        onMouseLeave={() => setActiveCard(null)}
+        onMouseLeave={() => setHoveredCard(null)}
         className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8"
       >
         <div className="mb-10">
@@ -148,14 +154,15 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
             return (
               <article
                 key={card.id}
-                onMouseEnter={() => setActiveCard(card.id)}
-                onClick={() => setActiveCard(card.id)}
+                onMouseEnter={() => setHoveredCard(card.id)}
+                onClick={() => handleCardClick(card.id)}
                 role="button"
                 tabIndex={0}
+                aria-expanded={isSelected}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    setActiveCard(card.id);
+                    handleCardClick(card.id);
                   }
                 }}
                 className={`card-interactive group cursor-pointer rounded-xl border ${leftBorder} bg-white p-6 transition-all duration-300 dark:bg-[#14243D]/75 ${
