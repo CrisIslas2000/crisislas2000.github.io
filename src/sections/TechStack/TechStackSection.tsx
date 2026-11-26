@@ -187,29 +187,118 @@ export function TechStackSection({
 
             <div
               onMouseLeave={() => setIsInspecting(false)}
-              className="flex flex-col items-stretch gap-6 lg:flex-row"
+              className={`grid grid-cols-1 gap-6 transition-[grid-template-columns] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                isInspecting ? 'lg:grid-cols-[63%_1fr]' : 'lg:grid-cols-[66%_1fr]'
+              }`}
             >
-              {/* Left: Pitch shrinks subtly via animatable percentage width */}
-              <div
-                className={`w-full transition-[width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                  isInspecting ? 'lg:w-[63%]' : 'lg:w-[66%]'
-                }`}
-              >
+              {/* 1. Pitch (Order 1 on mobile & desktop left-top) */}
+              <div className="order-1 w-full lg:col-start-1 lg:row-start-1">
                 <div className="relative overflow-hidden rounded-2xl border border-[#2563EB]/50 bg-[#080F1E] p-4 sm:p-6">
+                  {/* Turf Stripes: Horizontal on mobile vertical pitch, Vertical on desktop horizontal pitch */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 opacity-35"
+                    className="pointer-events-none absolute inset-0 opacity-35 sm:hidden"
+                    style={{
+                      backgroundImage:
+                        'repeating-linear-gradient(0deg, #080F1E 0px, #080F1E 44px, #0D1933 44px, #0D1933 88px)',
+                    }}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 hidden opacity-35 sm:block"
                     style={{
                       backgroundImage:
                         'repeating-linear-gradient(90deg, #080F1E 0px, #080F1E 48px, #0D1933 48px, #0D1933 96px)',
                     }}
                   />
 
+                  {/* Mobile Vertical Pitch SVG Markings */}
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 360 520"
+                    preserveAspectRatio="none"
+                    className="pointer-events-none absolute inset-0 h-full w-full sm:hidden"
+                  >
+                    <rect
+                      x="14"
+                      y="14"
+                      width="332"
+                      height="492"
+                      rx="6"
+                      fill="none"
+                      stroke="#2563EB"
+                      strokeOpacity="0.45"
+                      strokeWidth="2"
+                    />
+                    <line
+                      x1="14"
+                      y1="260"
+                      x2="346"
+                      y2="260"
+                      stroke="#2563EB"
+                      strokeOpacity="0.4"
+                      strokeWidth="2"
+                    />
+                    <circle
+                      cx="180"
+                      cy="260"
+                      r="46"
+                      fill="none"
+                      stroke="#2563EB"
+                      strokeOpacity="0.4"
+                      strokeWidth="2"
+                    />
+                    <circle cx="180" cy="260" r="3.5" fill="#63B3FA" fillOpacity="0.6" />
+                    {/* Top Penalty Area (POR) */}
+                    <rect
+                      x="85"
+                      y="14"
+                      width="190"
+                      height="74"
+                      fill="none"
+                      stroke="#2563EB"
+                      strokeOpacity="0.4"
+                      strokeWidth="2"
+                    />
+                    <rect
+                      x="130"
+                      y="14"
+                      width="100"
+                      height="30"
+                      fill="none"
+                      stroke="#2563EB"
+                      strokeOpacity="0.35"
+                      strokeWidth="1.5"
+                    />
+                    {/* Bottom Penalty Area (DEL) */}
+                    <rect
+                      x="85"
+                      y="432"
+                      width="190"
+                      height="74"
+                      fill="none"
+                      stroke="#A50044"
+                      strokeOpacity="0.45"
+                      strokeWidth="2"
+                    />
+                    <rect
+                      x="130"
+                      y="476"
+                      width="100"
+                      height="30"
+                      fill="none"
+                      stroke="#C8102E"
+                      strokeOpacity="0.4"
+                      strokeWidth="1.5"
+                    />
+                  </svg>
+
+                  {/* Desktop Horizontal Pitch SVG Markings */}
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 800 440"
                     preserveAspectRatio="none"
-                    className="pointer-events-none absolute inset-0 h-full w-full"
+                    className="pointer-events-none absolute inset-0 hidden h-full w-full sm:block"
                   >
                     <rect
                       x="18"
@@ -283,12 +372,13 @@ export function TechStackSection({
                     />
                   </svg>
 
+                  {/* 4-3-3 Formation Grid (Vertical rows on mobile, Horizontal columns on sm+) */}
                   <div className="relative z-10 grid min-h-[340px] grid-cols-1 gap-5 py-2 sm:grid-cols-4 sm:items-center">
                     <div className="flex flex-col items-center gap-2">
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         POR
                       </span>
-                      <div className="flex flex-wrap justify-center gap-2.5 sm:flex-col">
+                      <div className="flex justify-center gap-2.5 sm:flex-col">
                         {goalkeeper.map(renderPitchPlayer)}
                       </div>
                     </div>
@@ -297,7 +387,7 @@ export function TechStackSection({
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         DEF (4)
                       </span>
-                      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-1">
+                      <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-1 sm:gap-2.5">
                         {defenders.map(renderPitchPlayer)}
                       </div>
                     </div>
@@ -306,7 +396,7 @@ export function TechStackSection({
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         MED (3)
                       </span>
-                      <div className="flex flex-wrap justify-center gap-3 sm:flex-col">
+                      <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-col sm:gap-3">
                         {midfielders.map(renderPitchPlayer)}
                       </div>
                     </div>
@@ -315,59 +405,59 @@ export function TechStackSection({
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#63B3FA]">
                         DEL (3)
                       </span>
-                      <div className="flex flex-wrap justify-center gap-3 sm:flex-col">
+                      <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-col sm:gap-3">
                         {forwards.map(renderPitchPlayer)}
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Bench / Reserves Bar (also activates inspector on hover) */}
-                <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-[#14243D]/70">
-                  <div className="mb-3 flex items-center justify-between">
-                    <span className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-[#63B3FA]">
-                      {t.benchLabel} ({tacticalBench.length})
-                    </span>
-                    <span className="font-mono text-[11px] text-slate-500 dark:text-[#94A3B8]">
-                      {t.exploringLabel}: Spring Boot
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {tacticalBench.map((tech) => {
-                      const isSelected = selectedName === tech.name;
-                      const isDimmed = isInspecting && !isSelected;
-                      return (
-                        <button
-                          key={tech.name}
-                          type="button"
-                          onClick={() => handleSelectTech(tech.name)}
-                          onMouseEnter={() => handleSelectTech(tech.name)}
-                          aria-pressed={isSelected}
-                          className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-mono text-xs transition-all duration-300 hover:-translate-y-0.5 ${
-                            isSelected
-                              ? 'scale-105 border border-[#2563EB] bg-[#2563EB] text-white shadow-sm'
-                              : isDimmed
-                                ? 'border border-slate-200 bg-slate-50 text-slate-700 opacity-65 blur-[0.45px] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
-                                : tech.usage === 'exploring'
-                                  ? 'border border-dashed border-[#63B3FA]/60 bg-[#63B3FA]/10 text-slate-700 hover:border-[#2563EB] dark:text-[#63B3FA]'
-                                  : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#2563EB] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
-                          }`}
-                        >
-                          <TechLogo name={tech.name} className="h-3.5 w-3.5 shrink-0" />
-                          <span>{tech.name}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
+              {/* 2. Bench / Reserves (Order 3 on mobile below Inspector; desktop left-bottom) */}
+              <div className="order-3 w-full rounded-2xl border border-slate-200 bg-white p-4 lg:col-start-1 lg:row-start-2 dark:border-slate-800 dark:bg-[#14243D]/70">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-[#63B3FA]">
+                    {t.benchLabel} ({tacticalBench.length})
+                  </span>
+                  <span className="font-mono text-[11px] text-slate-500 dark:text-[#94A3B8]">
+                    {t.exploringLabel}: Spring Boot
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {tacticalBench.map((tech) => {
+                    const isSelected = selectedName === tech.name;
+                    const isDimmed = isInspecting && !isSelected;
+                    return (
+                      <button
+                        key={tech.name}
+                        type="button"
+                        onClick={() => handleSelectTech(tech.name)}
+                        onMouseEnter={() => handleSelectTech(tech.name)}
+                        aria-pressed={isSelected}
+                        className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-mono text-xs transition-all duration-300 hover:-translate-y-0.5 ${
+                          isSelected
+                            ? 'scale-105 border border-[#2563EB] bg-[#2563EB] text-white shadow-sm'
+                            : isDimmed
+                              ? 'border border-slate-200 bg-slate-50 text-slate-700 opacity-65 blur-[0.45px] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
+                              : tech.usage === 'exploring'
+                                ? 'border border-dashed border-[#63B3FA]/60 bg-[#63B3FA]/10 text-slate-700 hover:border-[#2563EB] dark:text-[#63B3FA]'
+                                : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#2563EB] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
+                        }`}
+                      >
+                        <TechLogo name={tech.name} className="h-3.5 w-3.5 shrink-0" />
+                        <span>{tech.name}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Right: Inspector expands subtly to draw attention without ballooning */}
+              {/* 3. Inspector (Order 2 on mobile between Pitch and Bench; desktop right column spanning both rows) */}
               <aside
-                className={`flex w-full flex-col justify-between rounded-2xl border bg-white p-6 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-[#14243D]/85 ${
+                className={`order-2 flex w-full flex-col justify-between rounded-2xl border bg-white p-6 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] lg:col-start-2 lg:row-span-2 lg:row-start-1 dark:bg-[#14243D]/85 ${
                   isInspecting
-                    ? 'scale-[1.015] border-[#2563EB] shadow-lg shadow-[#2563EB]/15 lg:w-[37%] dark:border-[#63B3FA]'
-                    : 'border-slate-200 lg:w-[34%] dark:border-slate-800'
+                    ? 'scale-[1.015] border-[#2563EB] shadow-lg shadow-[#2563EB]/15 dark:border-[#63B3FA]'
+                    : 'border-slate-200 dark:border-slate-800'
                 }`}
               >
                 <div>
