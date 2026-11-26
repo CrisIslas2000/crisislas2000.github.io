@@ -56,14 +56,17 @@ const cardLeftBorders = [
 ];
 
 export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
-  const [activeCard, setActiveCard] = useState<string>('developer');
+  const [activeCard, setActiveCard] = useState<string | null>(null);
 
   return (
     <section
       id="beyond-the-code"
       className="relative border-b border-slate-200/80 py-16 sm:py-24 dark:border-slate-800/80"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div
+        onMouseLeave={() => setActiveCard(null)}
+        className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8"
+      >
         <div className="mb-10">
           <p className="font-mono text-xs font-medium uppercase tracking-widest text-[#2563EB] dark:text-[#63B3FA]">
             {t.eyebrow}
@@ -115,8 +118,9 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
           })}
         </div>
 
-        {/* Dynamic Spotlight Panel for the Active Card */}
-        <div className="mt-6 overflow-hidden rounded-2xl border border-[#2563EB]/40 bg-[#080F1E] p-6 text-[#F1F5F9] shadow-xl shadow-[#2563EB]/10 transition-all duration-300">
+        {/* Dynamic Spotlight Panel (opens on card hover/click) */}
+        {activeCard && (
+          <div className="mt-6 overflow-hidden rounded-2xl border border-[#2563EB]/40 bg-[#080F1E] p-6 text-[#F1F5F9] shadow-xl shadow-[#2563EB]/10 transition-all duration-300">
           {activeCard === 'developer' && (
             <div className="animate-roulette-slide grid items-center gap-6 md:grid-cols-12">
               <div className="md:col-span-7">
@@ -216,7 +220,8 @@ export function BeyondCodeSection({ t }: BeyondCodeSectionProps) {
               </div>
             </div>
           )}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

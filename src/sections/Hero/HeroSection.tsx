@@ -175,7 +175,7 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             <img
               src={profile.portraitSrc}
               alt={t.portraitAlt}
-              className="relative z-10 h-auto w-full max-w-[340px] object-contain object-top transition-transform duration-500 ease-out group-hover:scale-[1.07] [mask-image:linear-gradient(to_bottom,black_82%,transparent_100%)]"
+              className="relative z-10 h-auto w-full max-w-[340px] rounded-2xl object-cover object-top transition-transform duration-500 ease-out group-hover:scale-110 [mask-image:linear-gradient(to_bottom,black_76%,transparent_100%)] dark:rounded-none dark:[mask-image:radial-gradient(ellipse_78%_85%_at_50%_46%,black_62%,transparent_100%)]"
               loading="eager"
               decoding="async"
             />

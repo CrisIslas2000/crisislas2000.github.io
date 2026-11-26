@@ -11,11 +11,13 @@ export function AboutSection({ t }: AboutSectionProps) {
   const [typedLength, setTypedLength] = useState(0);
   const [started, setStarted] = useState(false);
 
-  // Local non-persisted editable state for the JSON cards
+  // Local non-persisted editable state for the JSON cards + post-brace note
   const [editablePillars, setEditablePillars] = useState(t.pillars);
-  const [editingCell, setEditingCell] = useState<{ idx: number; field: 'title' | 'description' } | null>(
-    null
-  );
+  const [postNotes, setPostNotes] = useState<string[]>(['', '', '']);
+  const [editingCell, setEditingCell] = useState<{
+    idx: number;
+    field: 'title' | 'description' | 'note';
+  } | null>(null);
 
   useEffect(() => {
     setEditablePillars(t.pillars);
@@ -185,6 +187,38 @@ export function AboutSection({ t }: AboutSectionProps) {
                     </div>
                   </div>
                   <p className="text-slate-400 dark:text-slate-500">{'}'}</p>
+
+                  {/* Editable line after closing brace } */}
+                  <div className="mt-2 border-t border-slate-200/70 pt-2 dark:border-slate-800">
+                    {editingCell?.idx === index && editingCell.field === 'note' ? (
+                      <input
+                        type="text"
+                        autoFocus
+                        placeholder="// escribe aquí..."
+                        value={postNotes[index] ?? ''}
+                        onChange={(e) =>
+                          setPostNotes((prev) =>
+                            prev.map((val, i) => (i === index ? e.target.value : val))
+                          )
+                        }
+                        onBlur={() => setEditingCell(null)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === 'Escape') setEditingCell(null);
+                        }}
+                        className="w-full rounded border border-[#2563EB] bg-slate-50 px-1.5 py-0.5 font-mono text-[11px] text-slate-800 focus:outline-none dark:bg-[#14243D] dark:text-[#63B3FA]"
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setEditingCell({ idx: index, field: 'note' })}
+                        className="w-full cursor-text rounded px-1 py-0.5 text-left font-mono text-[11px] text-slate-400 transition-colors hover:bg-[#2563EB]/10 hover:text-[#2563EB] dark:text-slate-500 dark:hover:text-[#63B3FA]"
+                      >
+                        {postNotes[index]
+                          ? `// ${postNotes[index]}`
+                          : '// + clic para escribir nota libre...'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </article>
             );
