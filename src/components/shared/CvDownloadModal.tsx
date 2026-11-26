@@ -10,7 +10,7 @@ interface CvDownloadModalProps {
 
 function triggerPdfDownload() {
   const link = document.createElement('a');
-  link.href = '/documents/CV_Cristian_Islas.pdf';
+  link.href = '/documents/CV_Cristian_Islas-v2.pdf';
   link.download = 'CV_Cristian_Islas.pdf';
   document.body.appendChild(link);
   link.click();
