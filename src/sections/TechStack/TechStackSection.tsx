@@ -73,7 +73,7 @@ export function TechStackSection({
           isSelected
             ? 'scale-105 border-[#63B3FA] bg-[#2563EB]/30 ring-2 ring-[#63B3FA]/60'
             : isDimmed
-              ? 'border-[#2563EB]/30 bg-[#080F1E]/80 opacity-70'
+              ? 'border-[#2563EB]/30 bg-[#080F1E]/80 opacity-65 blur-[0.45px]'
               : 'border-[#2563EB]/40 bg-[#080F1E]/85 hover:border-[#63B3FA]/80 hover:bg-[#14243D]'
         }`}
       >
@@ -347,7 +347,7 @@ export function TechStackSection({
                             isSelected
                               ? 'scale-105 border border-[#2563EB] bg-[#2563EB] text-white shadow-sm'
                               : isDimmed
-                                ? 'border border-slate-200 bg-slate-50 text-slate-700 opacity-70 dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
+                                ? 'border border-slate-200 bg-slate-50 text-slate-700 opacity-65 blur-[0.45px] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
                                 : tech.usage === 'exploring'
                                   ? 'border border-dashed border-[#63B3FA]/60 bg-[#63B3FA]/10 text-slate-700 hover:border-[#2563EB] dark:text-[#63B3FA]'
                                   : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#2563EB] dark:border-slate-700 dark:bg-[#080F1E] dark:text-[#F1F5F9]'
