@@ -85,7 +85,7 @@ const HERO_FIFA_TRAITS: HeroTrait[] = [
   },
   {
     code: 'GIT',
-    label: { es: 'Deploy en viernes sin miedo', en: 'Fearless Friday Deploy' },
+    label: { es: 'Cero miedo al deploy en viernes', en: 'Zero fear of Friday deploys' },
     side: 'left',
     posClass: 'sm:-left-16 sm:bottom-1',
     delayClass: 'delay-[360ms]',
