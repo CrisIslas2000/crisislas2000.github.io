@@ -25,7 +25,12 @@ export function App() {
   const t = translations[language];
 
   const handleDownloadCv = () => {
-    window.print();
+    const link = document.createElement('a');
+    link.href = '/documents/CV_Cristian_Islas.pdf';
+    link.download = 'CV_Cristian_Islas.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
