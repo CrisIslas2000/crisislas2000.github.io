@@ -18,10 +18,50 @@ const ROTATING_SPECIALTIES = [
   'Build. Learn. Evolve.',
 ];
 
+const HERO_FIFA_TRAITS = [
+  {
+    code: 'DBG',
+    label: { es: 'Debugging en producción', en: 'Prod Debugging' },
+    posClass: 'sm:-left-10 sm:top-4',
+    delayClass: 'delay-[0ms]',
+  },
+  {
+    code: 'ARQ',
+    label: { es: 'Arquitectura en capas', en: 'Layered Architecture' },
+    posClass: 'sm:-right-10 sm:top-6',
+    delayClass: 'delay-[60ms]',
+  },
+  {
+    code: 'JAV',
+    label: { es: 'Modo Java + Café', en: 'Java + Coffee Mode' },
+    posClass: 'sm:-left-12 sm:top-1/2 sm:-translate-y-1/2',
+    delayClass: 'delay-[120ms]',
+  },
+  {
+    code: 'API',
+    label: { es: 'Pases filtrados (REST)', en: 'Through-Ball APIs' },
+    posClass: 'sm:-right-12 sm:top-1/2 sm:-translate-y-1/2',
+    delayClass: 'delay-[180ms]',
+  },
+  {
+    code: 'GIT',
+    label: { es: 'Deploy en viernes sin miedo', en: 'Fearless Friday Deploy' },
+    posClass: 'sm:-left-8 sm:bottom-6',
+    delayClass: 'delay-[240ms]',
+  },
+  {
+    code: 'RES',
+    label: { es: 'Aguante en el ring', en: 'Ring Resilience' },
+    posClass: 'sm:-right-8 sm:bottom-6',
+    delayClass: 'delay-[300ms]',
+  },
+];
+
 export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionProps) {
   const [wordIndex, setWordIndex] = useState(0);
   const [charCount, setCharCount] = useState(0);
   const [phase, setPhase] = useState<'typing' | 'pausing' | 'deleting'>('typing');
+  const [photoFocused, setPhotoFocused] = useState(false);
 
   const currentWord = ROTATING_SPECIALTIES[wordIndex] ?? ROTATING_SPECIALTIES[0];
 
@@ -43,7 +83,6 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
         timer = window.setTimeout(() => setPhase('pausing'), 0);
       }
     } else if (phase === 'pausing') {
-      // Visible 2 seconds before erasing
       timer = window.setTimeout(() => setPhase('deleting'), 2000);
     } else {
       if (charCount > 0) {
@@ -65,8 +104,12 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
       className="relative overflow-hidden border-b border-slate-200/80 py-14 sm:py-20 dark:border-slate-800/80"
     >
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
-        {/* Left: Propuesta A Editorial Intro */}
-        <div className="order-2 lg:order-1 lg:col-span-7">
+        {/* Left: Editorial Intro (dims smoothly when photo spotlight is active) */}
+        <div
+          className={`order-2 transition-all duration-500 lg:order-1 lg:col-span-7 ${
+            photoFocused ? 'opacity-40 blur-[1.5px]' : 'opacity-100 blur-0'
+          }`}
+        >
           <div className="inline-flex items-center gap-2 rounded-md border border-[#2563EB]/30 bg-[#14243D]/10 px-3 py-1 font-mono text-xs font-medium text-[#1D4ED8] dark:bg-[#14243D] dark:text-[#63B3FA]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB] dark:bg-[#63B3FA]" />
             <span>{profile.role[language]}</span>
@@ -77,7 +120,6 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             <span className="text-[#2563EB]">.</span>
           </h1>
 
-          {/* Typewriter with 2s hold + erase */}
           <p
             aria-live="polite"
             className="mt-2 min-h-[1.75rem] font-mono text-sm font-semibold text-[#2563EB] sm:text-base dark:text-[#63B3FA]"
@@ -94,7 +136,6 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             {profile.headlineBio[language]}
           </p>
 
-          {/* Enhanced Interactive CTAs */}
           <div className="mt-8 flex flex-wrap items-center gap-3.5">
             <button
               type="button"
@@ -120,7 +161,6 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
             </a>
           </div>
 
-          {/* Social Icon Buttons */}
           <div className="mt-6 flex items-center gap-3">
             <a
               href={profile.githubUrl}
@@ -165,21 +205,85 @@ export function HeroSection({ profile, language, t, onDownloadCv }: HeroSectionP
           </div>
         </div>
 
-        {/* Right: Transparent PNG Portrait with Stronger Hover Zoom */}
-        <div className="order-1 flex justify-center lg:order-2 lg:col-span-5">
-          <div className="group relative flex w-full max-w-sm items-center justify-center">
+        {/* Right: Portrait Spotlight + Floating FIFA-Style Dev Badges (No Numbers) */}
+        <div className="order-1 flex flex-col items-center lg:order-2 lg:col-span-5">
+          <div
+            onMouseEnter={() => setPhotoFocused(true)}
+            onMouseLeave={() => setPhotoFocused(false)}
+            onClick={() => setPhotoFocused((prev) => !prev)}
+            role="button"
+            tabIndex={0}
+            aria-pressed={photoFocused}
+            aria-label={
+              language === 'es'
+                ? 'Ver atributos estilo ficha técnica'
+                : 'View tech card attributes'
+            }
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setPhotoFocused((prev) => !prev);
+              }
+            }}
+            className="relative flex w-full max-w-sm cursor-pointer items-center justify-center focus:outline-none"
+          >
+            {/* Radial Blue Glow */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute h-72 w-72 rounded-full bg-[#2563EB]/25 blur-3xl transition-all duration-500 group-hover:scale-115 group-hover:bg-[#2563EB]/40 dark:bg-[#2563EB]/35"
+              className={`pointer-events-none absolute h-72 w-72 rounded-full blur-3xl transition-all duration-500 ${
+                photoFocused
+                  ? 'scale-125 bg-[#2563EB]/45 dark:bg-[#2563EB]/50'
+                  : 'bg-[#2563EB]/30 dark:bg-[#2563EB]/35'
+              }`}
             />
+
             <img
               src={profile.portraitSrc}
               alt={t.portraitAlt}
-              className="relative z-10 h-auto w-full max-w-[340px] rounded-2xl object-cover object-top transition-transform duration-500 ease-out group-hover:scale-110 [mask-image:linear-gradient(to_bottom,black_76%,transparent_100%)] dark:rounded-none dark:[mask-image:radial-gradient(ellipse_78%_85%_at_50%_46%,black_62%,transparent_100%)]"
+              className={`relative z-10 h-auto w-full max-w-[340px] rounded-2xl object-cover object-top transition-transform duration-500 ease-out [mask-image:linear-gradient(to_bottom,black_76%,transparent_100%)] dark:rounded-none dark:[mask-image:radial-gradient(ellipse_78%_85%_at_50%_46%,black_62%,transparent_100%)] ${
+                photoFocused ? 'scale-110' : 'scale-100'
+              }`}
               loading="eager"
               decoding="async"
             />
+
+            {/* Floating FIFA-Style Dev Badges (Desktop sm+) */}
+            {HERO_FIFA_TRAITS.map((trait) => (
+              <div
+                key={trait.code}
+                aria-hidden={!photoFocused}
+                className={`pointer-events-none absolute z-20 hidden items-center gap-2 rounded-xl border border-[#2563EB]/60 bg-[#080F1E]/95 px-3 py-1.5 shadow-lg shadow-[#2563EB]/25 backdrop-blur-xs transition-all duration-300 sm:flex ${trait.posClass} ${trait.delayClass} ${
+                  photoFocused ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                }`}
+              >
+                <span className="rounded bg-[#2563EB] px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
+                  {trait.code}
+                </span>
+                <span className="whitespace-nowrap font-mono text-[11px] font-medium text-[#F1F5F9]">
+                  {trait.label[language]}
+                </span>
+              </div>
+            ))}
           </div>
+
+          {/* Mobile Grid of FIFA-Style Dev Badges when Tapped */}
+          {photoFocused && (
+            <div className="animate-roulette-slide mt-4 grid w-full max-w-sm grid-cols-2 gap-2 sm:hidden">
+              {HERO_FIFA_TRAITS.map((trait) => (
+                <div
+                  key={trait.code}
+                  className="flex items-center gap-2 rounded-lg border border-[#2563EB]/50 bg-[#080F1E]/95 px-2.5 py-1.5"
+                >
+                  <span className="rounded bg-[#2563EB] px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
+                    {trait.code}
+                  </span>
+                  <span className="truncate font-mono text-[10px] text-[#F1F5F9]">
+                    {trait.label[language]}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
